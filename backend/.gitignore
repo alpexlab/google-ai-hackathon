@@ -1,0 +1,23 @@
+# Environment files
+.env*
+!.env.sample
+
+# IDE config folders
+.idea
+.vscode
+
+# Virtual environment folders
+.venv
+
+# Database
+db.sqlite3
+
+# Temporary files
+__pycache__/
+*.pyc
+
+# Media Files
+media/
+
+# static files
+static/

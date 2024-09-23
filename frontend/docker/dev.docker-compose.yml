@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  frontend:
+    container_name: alpexlab_frontend
+    image: alpexlab_frontend
+    build:
+      context: ../
+      dockerfile: docker/dev.Dockerfile
+    env_file:
+      - ../.env
+    ports:
+      - 5173:5173
+    volumes:
+      - ../package.json:/alpexlab/package.json
+      - ../package-lock.json:/alpexlab/package-lock.json
+      - ../src/:/alpexlab/src/
+      - ../public/:/alpexlab/public/

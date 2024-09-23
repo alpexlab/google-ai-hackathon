@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: docker/dev.Dockerfile
+    image: backend
+    env_file: .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/backend
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    container_name: db
+    hostname: ${POSTGRES_HOST}
+    env_file: .env
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}", "-h", "${POSTGRES_HOST}"]
+      interval: 5s
+      retries: 5
+      timeout: 5s
+
+
+volumes:
+  db:
