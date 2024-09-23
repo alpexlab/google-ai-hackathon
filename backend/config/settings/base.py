@@ -12,7 +12,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:8000",
     "http://localhost:8000",
-    os.environ.get("BASE_URL"),
+    f'{os.environ.get("BASE_URL")}:9200',
     f'{os.environ.get("BASE_URL")}:9100',
 ]
 ALLOWED_HOSTS = ["*"]
@@ -24,7 +24,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "cancer"
+    "cancer",
 ]
 
 MIDDLEWARE = [
@@ -95,9 +95,8 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
-STATIC_URL = os.environ.get("STORAGE_BUCKET_URL")
-MEDIA_URL = os.environ.get("STORAGE_BUCKET_URL")
+STATIC_URL = f"{os.environ.get('STORAGE_BUCKET_URL')}/static/"
+MEDIA_URL = f"{os.environ.get('STORAGE_BUCKET_URL')}/media/"
 
 STORAGES = {
     "default": {
@@ -107,7 +106,7 @@ STORAGES = {
         },
     },
     "staticfiles": {
-        "BACKEND": "cancer.storage.SupabaseMediaStorage",
+        "BACKEND": "cancer.storage.SupabaseStaticStorage",
         "OPTIONS": {
             "location": "static",
         },
