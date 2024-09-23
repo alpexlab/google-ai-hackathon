@@ -1,6 +1,6 @@
 FROM node:20.11.1-alpine AS base
 
-WORKDIR /alpexlab/
+WORKDIR /frontend/
 
 COPY package* .
 

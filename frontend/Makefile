@@ -10,16 +10,16 @@ down:
 	docker compose -f $(DEV_DOCKER_COMPOSE) down
 
 logs:
-	docker logs -f alpexlab_frontend
+	docker logs -f frontend
 
 shell:
-	docker exec -it alpexlab_frontend sh
+	docker exec -it frontend sh
 
 script:
-	docker exec -it alpexlab_frontend $(cmd)
+	docker exec -it frontend $(cmd)
 
 lint:
-	docker exec -it alpexlab_frontend npm run lint
+	docker exec -it frontend npm run lint
 
 prettier:
-	docker exec -it alpexlab_frontend npm run prettier
+	docker exec -it frontend npm run prettier

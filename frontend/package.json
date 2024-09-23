@@ -1,5 +1,5 @@
 {
-  "name": "alpexlab",
+  "name": "frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,6 +12,11 @@
     "prettier:check": "prettier --check ."
   },
   "dependencies": {
+    "@supabase/auth-js": "github:supabase/gotrue-js",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/gotrue-js": "^2.65.0",
+    "@supabase/supabase-js": "^2.45.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3"
