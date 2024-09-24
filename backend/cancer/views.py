@@ -1,5 +1,10 @@
+import threading
+
+from django.conf import settings
+
 from rest_framework.routers import DefaultRouter
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
 
 from cancer.models import (
     BreastCancer,
@@ -10,6 +15,7 @@ from cancer.models import (
     LungCancerReport,
     SkinCancerReport,
     BrainCancerReport,
+    Patient,
 )
 from cancer.serializers import (
     BreastCancerSerializer,
@@ -20,12 +26,29 @@ from cancer.serializers import (
     LungCancerReportSerializer,
     SkinCancerReportSerializer,
     BrainCancerReportSerializer,
+    PatientSerializer,
 )
+
+# from cancer.analysis.breast.predictions import BreastAnalysis
+
+
+class PatientViewSet(ModelViewSet):
+    queryset = Patient.objects.all()
+    serializer_class = PatientSerializer
 
 
 class BreastCancerViewSet(ModelViewSet):
     queryset = BreastCancer.objects.all()
     serializer_class = BreastCancerSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        cancer = serializer.instance
+        image_path = f"{settings.BASE_DIR}{cancer.mri.url}"
+        # threading.Thread(target=BreastAnalysis().predict, args=(image_path,)).start()
+        return Response(serializer.data)
 
 
 class LungCancerViewSet(ModelViewSet):

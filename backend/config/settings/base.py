@@ -95,20 +95,26 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-STATIC_URL = f"{os.environ.get('STORAGE_BUCKET_URL')}/static/"
-MEDIA_URL = f"{os.environ.get('STORAGE_BUCKET_URL')}/media/"
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "static"
 
-STORAGES = {
-    "default": {
-        "BACKEND": "cancer.storage.SupabaseMediaStorage",
-        "OPTIONS": {
-            "location": "media",
-        },
-    },
-    "staticfiles": {
-        "BACKEND": "cancer.storage.SupabaseStaticStorage",
-        "OPTIONS": {
-            "location": "static",
-        },
-    },
-}
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# STATIC_URL = f"{os.environ.get('STORAGE_BUCKET_URL')}/static/"
+# MEDIA_URL = f"{os.environ.get('STORAGE_BUCKET_URL')}/media/"
+
+# STORAGES = {
+#     "default": {
+#         "BACKEND": "cancer.storage.SupabaseMediaStorage",
+#         "OPTIONS": {
+#             "location": "media",
+#         },
+#     },
+#     "staticfiles": {
+#         "BACKEND": "cancer.storage.SupabaseStaticStorage",
+#         "OPTIONS": {
+#             "location": "static",
+#         },
+#     },
+# }

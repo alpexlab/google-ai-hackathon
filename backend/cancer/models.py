@@ -18,7 +18,7 @@ class Cancer(models.Model):
 
 
 class BreastCancer(Cancer):
-    pass
+    mri = models.ImageField(upload_to="cancer/breast", blank=True, null=True)
 
 
 class LungCancer(Cancer):

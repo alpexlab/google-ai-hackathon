@@ -7,9 +7,16 @@ from cancer.models import (
     LungCancerReport,
     SkinCancerReport,
     BrainCancerReport,
+    Patient,
 )
 
 from rest_framework import serializers
+
+
+class PatientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Patient
+        fields = "__all__"
 
 
 class BreastCancerSerializer(serializers.ModelSerializer):
