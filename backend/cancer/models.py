@@ -30,10 +30,18 @@ class SkinCancer(Cancer):
 
 
 class BrainCancer(Cancer):
-    pass
+    mri = models.ImageField(upload_to="cancer/brain", blank=True, null=True)
 
 
 class Report(models.Model):
+    class Status(models.TextChoices):
+        PROCESSING = "PROCESSING", "processing"
+        COMPLETE = "COMPLETE", "complete"
+
+    status = models.CharField(
+        choices=Status.choices, default=Status.PROCESSING, max_length=20
+    )
+
     @property
     def patient(self):
         return self.cancer.patient

@@ -9,3 +9,4 @@ django-cors-headers==4.1
 torch
 torchvision
 Pillow
+tensorflow

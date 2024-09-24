@@ -48,6 +48,10 @@ class BreastCancerViewSet(ModelViewSet):
         cancer = serializer.instance
         image_path = f"{settings.BASE_DIR}{cancer.mri.url}"
         # threading.Thread(target=BreastAnalysis().predict, args=(image_path,)).start()
+        report_serializer = BreastCancerReportSerializer(data={"cancer": cancer.id})
+        report_serializer.is_valid(raise_exception=True)
+        report_serializer.save()
+
         return Response(serializer.data)
 
 
@@ -64,6 +68,20 @@ class SkinCancerViewSet(ModelViewSet):
 class BrainCancerViewSet(ModelViewSet):
     queryset = BrainCancer.objects.all()
     serializer_class = BrainCancerSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        cancer = serializer.instance
+        image_path = f"{settings.BASE_DIR}{cancer.mri.url}"
+        # threading.Thread(target=BrainAnalysis().predict, args=(image_path,)).start()
+
+        report_serializer = BrainCancerReportSerializer(data={"cancer": cancer.id})
+        report_serializer.is_valid(raise_exception=True)
+        report_serializer.save()
+
+        return Response(serializer.data)
 
 
 class BreastCancerReportViewSet(ModelViewSet):
