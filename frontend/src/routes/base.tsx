@@ -7,7 +7,7 @@ import Login from '@/pages/login';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <AuthRequired><RootLayout /></AuthRequired>,
+    // element: <AuthRequired><RootLayout /></AuthRequired>,
     children: [
       {
         index: true,
