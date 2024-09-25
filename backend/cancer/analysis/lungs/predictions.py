@@ -20,10 +20,12 @@ class LungsAnalysis:
         img_array = np.expand_dims(img_array, axis=0)
         img_array /= 255.0
         return img_array
-    
+
     def analyze(self, img_path: str):
         result, predictions, predicted_class, img_array = self.predict(img_path)
-        result_image_path, stats_image_path = self.save_plots(img_array, predictions, predicted_class)
+        result_image_path, stats_image_path = self.save_plots(
+            img_array, predictions, predicted_class
+        )
 
         # Save the report here
 
@@ -48,33 +50,33 @@ class LungsAnalysis:
         # First subplot: image and predicted class
         plt.subplot(1, 2, 1)
         plt.imshow(image.array_to_img(img_array[0]))
-        plt.axis('off')
-        plt.title(f'Predicted: {self.class_names[predicted_class[0]]}')
+        plt.axis("off")
+        plt.title(f"Predicted: {self.class_names[predicted_class[0]]}")
 
         # Second subplot: prediction probabilities
         plt.subplot(1, 2, 2)
-        plt.bar(self.class_names, predictions[0], color=['blue', 'red', 'green'])
-        plt.xlabel('Class')
-        plt.ylabel('Probability')
-        plt.title('Prediction Probabilities')
+        plt.bar(self.class_names, predictions[0], color=["blue", "red", "green"])
+        plt.xlabel("Class")
+        plt.ylabel("Probability")
+        plt.title("Prediction Probabilities")
 
         # Save the plot
         result_image_path = f"{settings.BASE_DIR}/media/temp/lungs/{uuid.uuid4()}.jpg"
         os.makedirs(os.path.dirname(result_image_path), exist_ok=True)
-        plt.savefig(result_image_path, bbox_inches='tight')
+        plt.savefig(result_image_path, bbox_inches="tight")
         plt.close()
 
         # Plot for the prediction probabilities
         plt.figure()
-        plt.bar(self.class_names, predictions[0], color=['blue', 'red', 'green'])
-        plt.xlabel('Class')
-        plt.ylabel('Probability')
-        plt.title('Prediction Probabilities')
+        plt.bar(self.class_names, predictions[0], color=["blue", "red", "green"])
+        plt.xlabel("Class")
+        plt.ylabel("Probability")
+        plt.title("Prediction Probabilities")
 
         # Save the plot
         stats_image_path = f"{settings.BASE_DIR}/media/temp/lungs/{uuid.uuid4()}.jpg"
         os.makedirs(os.path.dirname(stats_image_path), exist_ok=True)
-        plt.savefig(stats_image_path, bbox_inches='tight')
+        plt.savefig(stats_image_path, bbox_inches="tight")
         plt.close()
 
         return result_image_path, stats_image_path
