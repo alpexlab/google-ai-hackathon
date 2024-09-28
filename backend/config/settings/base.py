@@ -7,13 +7,14 @@ SECRET_KEY = const.SECRET_KEY
 DEBUG = const.DEBUG
 
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://localhost:5173",
     "http://127.0.0.1:8000",
     "http://localhost:8000",
-    f'{os.environ.get("BASE_URL")}:9200',
-    f'{os.environ.get("BASE_URL")}:9100',
+    # f'{os.environ.get("BASE_URL")}:9200',
+    # f'{os.environ.get("BASE_URL")}:9100',
 ]
 ALLOWED_HOSTS = ["*"]
 
@@ -24,6 +25,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
     "cancer",
 ]
 
@@ -32,7 +34,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",

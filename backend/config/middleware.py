@@ -15,4 +15,4 @@ class AuthMiddleware(MiddlewareMixin):
         if user is None:
             return
 
-        request.doctor = user
+        request.doctor = user["email"]

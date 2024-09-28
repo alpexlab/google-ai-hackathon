@@ -36,6 +36,11 @@ class PatientViewSet(ModelViewSet):
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
 
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        request.data["doctor"] = request.doctor
+        return super().create(request, *args, **kwargs)
+
 
 class BreastCancerViewSet(ModelViewSet):
     queryset = BreastCancer.objects.all()
@@ -126,4 +131,4 @@ router.register("breast-report", BreastCancerReportViewSet)
 router.register("lung-report", LungCancerReportViewSet)
 router.register("skin-report", SkinCancerReportViewSet)
 router.register("brain-report", BrainCancerReportViewSet)
-router.register("patients", PatientViewSet)  
+router.register("patients", PatientViewSet)

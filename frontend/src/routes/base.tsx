@@ -8,21 +8,25 @@ import Analysis from '@/pages/analysis';
 const router = createBrowserRouter([
   {
     path: '/',
-    // element: <AuthRequired><RootLayout /></AuthRequired>,
+    element: (
+      <AuthRequired>
+        <RootLayout />
+      </AuthRequired>
+    ),
     children: [
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: '/analysis',
+        element: <Analysis />,
       },
     ],
   },
   {
     path: '/auth',
     element: <Login />,
-  },
-  {
-    path: '/analysis',
-    element: <Analysis />,
   },
 ]);
 
