@@ -16,43 +16,44 @@ export function AddPatient() {
       <PopoverContent className="w-80">
         <div className="grid gap-4">
           <div className="space-y-2">
-            <h4 className="font-medium leading-none">Dimensions</h4>
+            <h4 className="font-medium leading-none">Details</h4>
             <p className="text-sm text-muted-foreground">
-              Set the dimensions for the layer.
+              Add the known details of the Patient
             </p>
           </div>
           <div className="grid gap-2">
             <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="width">Width</Label>
+              <Label htmlFor="width">Name</Label>
               <Input
                 id="width"
-                defaultValue="100%"
+                defaultValue=""
                 className="col-span-2 h-8"
               />
             </div>
             <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="maxWidth">Max. width</Label>
+              <Label htmlFor="maxWidth">Age</Label>
               <Input
                 id="maxWidth"
-                defaultValue="300px"
+                defaultValue=""
                 className="col-span-2 h-8"
               />
             </div>
             <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="height">Height</Label>
+              <Label htmlFor="height">Cancer Type</Label>
               <Input
                 id="height"
-                defaultValue="25px"
+                defaultValue=""
                 className="col-span-2 h-8"
               />
             </div>
             <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="maxHeight">Max. height</Label>
+              <Label htmlFor="maxHeight">TNM Stages</Label>
               <Input
                 id="maxHeight"
-                defaultValue="none"
+                defaultValue=""
                 className="col-span-2 h-8"
               />
+              <Button variant="outline" className="bg-blue-600 text-white">Add</Button>
             </div>
           </div>
         </div>

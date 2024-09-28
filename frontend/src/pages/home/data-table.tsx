@@ -83,7 +83,7 @@ export function DataTable<TData, TValue>({
                             Columns
                         </Button>
                     </DropdownMenuTrigger>
-                    <AddPatient/>
+                    <AddPatient />
 
                     <DropdownMenuContent align="end">
                         {table
