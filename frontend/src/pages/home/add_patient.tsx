@@ -5,13 +5,15 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { addPatient } from '@/services/backend';
+import { _PATIENT } from '@/types';
 import { useState } from 'react';
 
 export function AddPatient() {
-  const [patient, setPatient] = useState({
+  const [patient, setPatient] = useState<_PATIENT>({
     name: '',
-    age: 30,
+    age: 45,
     email: '',
+    photo: null,
     medical_history: '',
   });
 
@@ -75,6 +77,18 @@ export function AddPatient() {
                 type='email'
                 className='col-span-2 h-8'
                 onChange={(e) => setPatient({ ...patient, email: e.target.value })}
+              />
+            </div>
+            <div className='grid grid-cols-3 items-center gap-4 mb-3'>
+              <Label htmlFor='width'>Photo</Label>
+              <Input
+                id='width'
+                type='file'
+                className='col-span-2 h-8'
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  setPatient({ ...patient, photo: e.target.files?.[0] ?? null });
+                }}
               />
             </div>
             <div className='grid grid-cols-3 items-center gap-4'>

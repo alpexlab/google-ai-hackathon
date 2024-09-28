@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FileUpload } from '../ui/file-upload';
 
-export const BreastCard = () => {
+export const LungCard = ({ patientId }: { patientId: string }) => {
   const [files, setFiles] = useState<File[]>([]);
   const handleFileUpload = (files: File[]) => {
     setFiles(files);
@@ -9,7 +9,7 @@ export const BreastCard = () => {
   };
   return (
     <div className='mx-auto '>
-      <div className='m-5 font-bold'>Upload MRI Scans of the Breast</div>
+      <div className='m-5 font-bold'>Upload Scans of the Lungs</div>
       <div>
         <div className='w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg'>
           <FileUpload onChange={handleFileUpload} />

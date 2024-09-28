@@ -18,7 +18,7 @@ export const addPatient = async (formData: _PATIENT) => {
     withCredentials: true,
     data: formData,
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
       'Authorization': `Bearer ${getAccessToken()}`,
     },
   };
@@ -29,5 +29,10 @@ export const addPatient = async (formData: _PATIENT) => {
 
 export const getPatients = async () => {
   const response: AxiosResponse<_PATIENT[]> = await basicAxios('/patients/');
+  return response.data;
+};
+
+export const getPatient = async (id: string) => {
+  const response: AxiosResponse<_PATIENT> = await basicAxios(`/patients/${id}`);
   return response.data;
 };

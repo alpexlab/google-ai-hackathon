@@ -1,4 +1,3 @@
-import Navbar from '@/components/ui/navbar';
 import { columns } from './column';
 import { DataTable } from './data-table';
 import Sidebar from '@/components/ui/sidebar';
@@ -20,7 +19,6 @@ const Home = () => {
 
   return (
     <>
-      <Navbar />
       <div className='flex'>
         <Sidebar />
         <div className='flex-1 container m-6 p-10'>

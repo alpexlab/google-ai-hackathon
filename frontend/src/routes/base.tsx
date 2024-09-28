@@ -3,7 +3,8 @@ import RootLayout from '@/components/layouts/Base';
 import Home from '@/pages/home';
 import AuthRequired from '@/components/AuthRequired';
 import Login from '@/pages/login';
-import Analysis from '@/pages/analysis';
+import PatientDetails from '@/pages/details';
+import AddScan from '@/pages/details/AddScan';
 
 const router = createBrowserRouter([
   {
@@ -19,8 +20,12 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: '/analysis',
-        element: <Analysis />,
+        path: '/details',
+        element: <PatientDetails />,
+      },
+      {
+        path: '/add-scan',
+        element: <AddScan />,
       },
     ],
   },

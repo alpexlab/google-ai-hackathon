@@ -8,4 +8,5 @@ export type _PATIENT = {
   age: number;
   email: string;
   medical_history: string;
+  photo: string | File | null;
 };

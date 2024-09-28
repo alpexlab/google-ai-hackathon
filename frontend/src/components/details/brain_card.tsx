@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FileUpload } from '../ui/file-upload';
 
-export const BrainCard = () => {
+export const BrainCard = ({ patientId }: { patientId: string }) => {
   const [files, setFiles] = useState<File[]>([]);
   const handleFileUpload = (files: File[]) => {
     setFiles(files);
