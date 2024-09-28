@@ -33,6 +33,6 @@ export const getPatients = async () => {
 };
 
 export const getPatient = async (id: string) => {
-  const response: AxiosResponse<_PATIENT> = await basicAxios(`/patients/${id}`);
+  const response: AxiosResponse<_PATIENT> = await basicAxios(`/patients/${id}/`);
   return response.data;
 };

@@ -12,7 +12,9 @@ const Navbar = () => {
   return (
     <nav className='bg-gray-800 p-4 flex justify-between items-center'>
       <div className='flex items-center'>
-        <img src={logo} className='h-[50px]' alt='Repello AI Logo' />
+        <a href='/'>
+          <img src={logo} className='h-[50px]' alt='Repello AI Logo' />
+        </a>
       </div>
       <div className='space-x-4'>
         <button

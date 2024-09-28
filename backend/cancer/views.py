@@ -28,16 +28,19 @@ from cancer.serializers import (
     BrainCancerReportSerializer,
     PatientSerializer,
 )
+from rest_framework.parsers import MultiPartParser
 
 # from cancer.analysis.breast.predictions import BreastAnalysis
+# from cancer.analysis.brain.predictions import BrainAnalysis
+# from cancer.analysis.lungs.predictions import LungsAnalysis
 
 
 class PatientViewSet(ModelViewSet):
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
+    parser_classes = [MultiPartParser]
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
         request.data["doctor"] = request.doctor
         return super().create(request, *args, **kwargs)
 
@@ -52,6 +55,9 @@ class BreastCancerViewSet(ModelViewSet):
         serializer.save()
         cancer = serializer.instance
         image_path = f"{settings.BASE_DIR}{cancer.mri.url}"
+        print("Predicting", image_path)
+        # BreastAnalysis().predict(image_path)
+        print("Predicted")
         # threading.Thread(target=BreastAnalysis().predict, args=(image_path,)).start()
         report_serializer = BreastCancerReportSerializer(data={"cancer": cancer.id})
         report_serializer.is_valid(raise_exception=True)
@@ -71,6 +77,7 @@ class LungCancerViewSet(ModelViewSet):
         cancer = serializer.instance
         image_path = f"{settings.BASE_DIR}{cancer.mri.url}"
         # threading.Thread(target=LungsAnalysis().predict, args=(image_path,)).start()
+        # LungsAnalysis().analyze(image_path)
         report_serializer = LungCancerReportSerializer(data={"cancer": cancer.id})
         report_serializer.is_valid(raise_exception=True)
         report_serializer.save()
@@ -93,11 +100,14 @@ class BrainCancerViewSet(ModelViewSet):
         serializer.save()
         cancer = serializer.instance
         image_path = f"{settings.BASE_DIR}{cancer.mri.url}"
-        # threading.Thread(target=BrainAnalysis().predict, args=(image_path,)).start()
 
         report_serializer = BrainCancerReportSerializer(data={"cancer": cancer.id})
         report_serializer.is_valid(raise_exception=True)
         report_serializer.save()
+        report = report_serializer.instance
+        # threading.Thread(
+        #     target=BrainAnalysis().analyze, args=(image_path, report.id)
+        # ).start()
 
         return Response(serializer.data)
 
@@ -124,7 +134,7 @@ class BrainCancerReportViewSet(ModelViewSet):
 
 router = DefaultRouter()
 router.register("breast", BreastCancerViewSet)
-router.register("lung", LungCancerViewSet)
+router.register("lungs", LungCancerViewSet)
 router.register("skin", SkinCancerViewSet)
 router.register("brain", BrainCancerViewSet)
 router.register("breast-report", BreastCancerReportViewSet)

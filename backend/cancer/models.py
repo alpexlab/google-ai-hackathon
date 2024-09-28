@@ -5,6 +5,9 @@ class Patient(models.Model):
     name = models.CharField(max_length=200)
     age = models.IntegerField()
     doctor = models.EmailField()
+    email = models.EmailField(null=True)
+    medical_history = models.TextField(null=True)
+    photo = models.ImageField(upload_to="patients", blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -72,3 +75,8 @@ class BrainCancerReport(Report):
     cancer = models.OneToOneField(
         BrainCancer, on_delete=models.CASCADE, related_name="report"
     )
+    result_image = models.URLField(null=True)
+    stats_image = models.URLField(null=True)
+    probs = models.JSONField(null=True)
+    predicted_label = models.CharField(max_length=200, null=True)
+    max_prob = models.FloatField(null=True)
