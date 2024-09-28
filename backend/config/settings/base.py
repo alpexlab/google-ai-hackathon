@@ -12,8 +12,8 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:8000",
     "http://localhost:8000",
-    f'{os.environ.get("BASE_URL")}:9200',
-    f'{os.environ.get("BASE_URL")}:9100',
+    f'http://{os.environ.get("BASE_URL")}:9200',
+    f'http://{os.environ.get("BASE_URL")}:9100',
 ]
 ALLOWED_HOSTS = ["*"]
 

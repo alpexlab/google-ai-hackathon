@@ -31,6 +31,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
+import { AddPatient } from "./add_patient"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -82,6 +83,8 @@ export function DataTable<TData, TValue>({
                             Columns
                         </Button>
                     </DropdownMenuTrigger>
+                    <AddPatient/>
+
                     <DropdownMenuContent align="end">
                         {table
                             .getAllColumns()
