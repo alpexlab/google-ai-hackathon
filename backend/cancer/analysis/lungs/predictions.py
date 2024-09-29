@@ -35,6 +35,7 @@ class LungsAnalysis:
         report.stats_image = "/media/" + stats_image_path.split("media/")[-1]
         report.predicted_label = result
         report.probs = predictions.tolist()[0]
+        report.max_prob = max(report.probs)
         report.status = LungCancerReport.Status.COMPLETE
         report.save()
 

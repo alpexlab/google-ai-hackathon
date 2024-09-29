@@ -161,6 +161,20 @@ class LungCancerViewSet(ModelViewSet):
 
         return Response(serializer.data)
 
+    @action(detail=True, methods=["get"])
+    def report(self, request, pk=None):
+        cancer = get_object_or_404(LungCancer, pk=pk)
+        report = cancer.report
+        data = {
+            "cancer": LungCancerSerializer(cancer).data,
+            "report": {
+                **LungCancerReportSerializer(report).data,
+                "classes": ["Benign", "Malignant", "No Tumor Detected"],
+            },
+        }
+
+        return Response(data)
+
 
 class SkinCancerViewSet(ModelViewSet):
     queryset = SkinCancer.objects.all()

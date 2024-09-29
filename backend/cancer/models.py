@@ -75,6 +75,7 @@ class LungCancerReport(Report):
     stats_image = models.URLField(null=True)
     probs = models.JSONField(null=True)
     predicted_label = models.CharField(max_length=200, null=True)
+    max_prob = models.FloatField(null=True)
 
 
 class SkinCancerReport(Report):
