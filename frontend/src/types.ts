@@ -10,3 +10,21 @@ export type _PATIENT = {
   medical_history: string;
   photo: string | File | null;
 };
+
+export type _BRAIN_CANCER = {
+  patient: string;
+  mri: File | null | string;
+  id?: string;
+};
+
+export type _BREAST_CANCER = {
+  patient: string;
+  mri: File | null | string;
+  id?: string;
+};
+
+export type _LUNG_CANCER = {
+  patient: string;
+  mri: File | null | string;
+  id?: string;
+};
