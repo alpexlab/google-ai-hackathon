@@ -31,8 +31,8 @@ class LungsAnalysis:
         )
 
         report = LungCancerReport.objects.get(id=report_id)
-        report.result_image = result_image_path.split("media/")[-1]
-        report.stats_image = stats_image_path.split("media/")[-1]
+        report.result_image = "/media/" + result_image_path.split("media/")[-1]
+        report.stats_image = "/media/" + stats_image_path.split("media/")[-1]
         report.predicted_label = result
         report.probs = predictions.tolist()[0]
         report.status = LungCancerReport.Status.COMPLETE

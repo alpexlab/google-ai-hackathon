@@ -5,6 +5,7 @@ from django.conf import settings
 from rest_framework.routers import DefaultRouter
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 from cancer.models import (
     BreastCancer,
@@ -67,7 +68,9 @@ class PatientViewSet(ModelViewSet):
             [
                 {
                     "type": "breast",
-                    "timestamp": datetime.strptime(scan["created_at"], iso_format).strftime("%Y-%m-%d %H:%M:%S"),
+                    "timestamp": datetime.strptime(
+                        scan["created_at"], iso_format
+                    ).strftime("%Y-%m-%d %H:%M:%S"),
                     **scan,
                 }
                 for scan in breast_cancer_serializer.data
@@ -78,7 +81,9 @@ class PatientViewSet(ModelViewSet):
             [
                 {
                     "type": "lungs",
-                    "timestamp": datetime.strptime(scan["created_at"], iso_format).strftime("%Y-%m-%d %H:%M:%S"),
+                    "timestamp": datetime.strptime(
+                        scan["created_at"], iso_format
+                    ).strftime("%Y-%m-%d %H:%M:%S"),
                     **scan,
                 }
                 for scan in lung_cancer_serializer.data
@@ -89,7 +94,9 @@ class PatientViewSet(ModelViewSet):
             [
                 {
                     "type": "brain",
-                    "timestamp": datetime.strptime(scan["created_at"], iso_format).strftime("%Y-%m-%d %H:%M:%S"),
+                    "timestamp": datetime.strptime(
+                        scan["created_at"], iso_format
+                    ).strftime("%Y-%m-%d %H:%M:%S"),
                     **scan,
                 }
                 for scan in brain_cancer_serializer.data
@@ -100,13 +107,15 @@ class PatientViewSet(ModelViewSet):
             [
                 {
                     "type": "skin",
-                    "timestamp": datetime.strptime(scan["created_at"], iso_format).strftime("%Y-%m-%d %H:%M:%S"),
+                    "timestamp": datetime.strptime(
+                        scan["created_at"], iso_format
+                    ).strftime("%Y-%m-%d %H:%M:%S"),
                     **scan,
                 }
                 for scan in skin_cancer_serializer.data
             ]
         )
-        
+
         data = sorted(data, key=lambda x: x["timestamp"], reverse=True)
         return Response(data)
 
@@ -176,6 +185,20 @@ class BrainCancerViewSet(ModelViewSet):
         threading.Thread(target=BrainAnalysis, args=(image_path, report.id)).start()
 
         return Response(serializer.data)
+
+    @action(detail=True, methods=["get"])
+    def report(self, request, pk=None):
+        cancer = get_object_or_404(BrainCancer, pk=pk)
+        report = cancer.report
+        data = {
+            "cancer": BrainCancerSerializer(cancer).data,
+            "report": {
+                **BrainCancerReportSerializer(report).data,
+                "classes": ["glioma", "meningioma", "notumor", "pituitary"],
+            },
+        }
+
+        return Response(data)
 
 
 class BreastCancerReportViewSet(ModelViewSet):

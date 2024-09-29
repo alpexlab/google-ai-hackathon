@@ -21,6 +21,7 @@ class PatientSerializer(serializers.ModelSerializer):
 
 class BreastCancerSerializer(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True)
+
     class Meta:
         model = BreastCancer
         fields = "__all__"
@@ -28,6 +29,7 @@ class BreastCancerSerializer(serializers.ModelSerializer):
 
 class LungCancerSerializer(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True)
+
     class Meta:
         model = LungCancer
         fields = "__all__"
@@ -35,6 +37,7 @@ class LungCancerSerializer(serializers.ModelSerializer):
 
 class SkinCancerSerializer(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True)
+
     class Meta:
         model = SkinCancer
         fields = "__all__"
@@ -42,6 +45,7 @@ class SkinCancerSerializer(serializers.ModelSerializer):
 
 class BrainCancerSerializer(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True)
+
     class Meta:
         model = BrainCancer
         fields = "__all__"

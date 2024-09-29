@@ -35,3 +35,20 @@ export type _LUNG_CANCER = {
   mri: File | null | string;
   id?: string;
 };
+
+export type _BRAIN_REPORT = {
+  cancer: _BRAIN_CANCER;
+  report: {
+    result_image: string;
+    stats_image: string;
+    probs: number[];
+    predicted_label: string;
+    max_prob: string;
+    classes: string[];
+    status: string;
+  };
+};
+
+export type _BREAST_REPORT = {};
+
+export type _LUNG_REPORT = {};

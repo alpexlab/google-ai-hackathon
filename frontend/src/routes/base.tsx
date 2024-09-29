@@ -5,6 +5,9 @@ import AuthRequired from '@/components/AuthRequired';
 import Login from '@/pages/login';
 import PatientDetails from '@/pages/details';
 import AddScan from '@/pages/details/AddScan';
+import Brain from '@/pages/report/Brain';
+import Breast from '@/pages/report/Breast';
+import Lungs from '@/pages/report/Lungs';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +29,18 @@ const router = createBrowserRouter([
       {
         path: '/add-scan',
         element: <AddScan />,
+      },
+      {
+        path: '/brain/:id',
+        element: <Brain />,
+      },
+      {
+        path: '/breast/:id',
+        element: <Breast />,
+      },
+      {
+        path: '/lungs/:id',
+        element: <Lungs />,
       },
     ],
   },

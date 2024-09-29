@@ -30,8 +30,8 @@ class BrainAnalysis:
         )
 
         report = BrainCancerReport.objects.get(id=report_id)
-        report.result_image = result_image_path.split("media/")[-1]
-        report.stats_image = stats_image_path.split("media/")[-1]
+        report.result_image = "/media/" + result_image_path.split("media/")[-1]
+        report.stats_image = "/media/" + stats_image_path.split("media/")[-1]
         report.probs = probs.tolist()
         report.predicted_label = predicted_label
         report.max_prob = max_prob
