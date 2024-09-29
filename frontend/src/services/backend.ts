@@ -1,4 +1,4 @@
-import { _BRAIN_CANCER, _BREAST_CANCER, _LUNG_CANCER, _PATIENT } from '@/types';
+import { _BRAIN_CANCER, _BREAST_CANCER, _LUNG_CANCER, _PATIENT, _SCAN } from '@/types';
 import { basicAxios } from './basicAxios';
 import type { AxiosResponse } from 'axios';
 
@@ -79,5 +79,10 @@ export const createLungCancer = async (formData: _LUNG_CANCER) => {
   };
 
   const response: AxiosResponse<_LUNG_CANCER> = await basicAxios('/lungs/', options);
+  return response.data;
+};
+
+export const getScans = async (patient: string) => {
+  const response: AxiosResponse<_SCAN[]> = await basicAxios(`/patients/${patient}/scans/`);
   return response.data;
 };

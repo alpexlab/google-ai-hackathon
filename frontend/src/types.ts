@@ -11,6 +11,13 @@ export type _PATIENT = {
   photo: string | File | null;
 };
 
+export type _SCAN = {
+  id: string;
+  type: string;
+  status: string;
+  timestamp: string;
+};
+
 export type _BRAIN_CANCER = {
   patient: string;
   mri: File | null | string;

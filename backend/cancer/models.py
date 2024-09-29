@@ -15,9 +15,15 @@ class Patient(models.Model):
 
 class Cancer(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
         abstract = True
+        ordering = ["-created_at"]
+
+    @property
+    def status(self):
+        return self.report.status
 
 
 class BreastCancer(Cancer):

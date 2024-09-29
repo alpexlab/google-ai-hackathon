@@ -29,6 +29,7 @@ from cancer.serializers import (
     PatientSerializer,
 )
 from rest_framework.parsers import MultiPartParser
+from rest_framework.decorators import action
 
 from cancer.analysis.breast.predictions import BreastAnalysis
 from cancer.analysis.brain.predictions import BrainAnalysis
@@ -43,6 +44,71 @@ class PatientViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         request.data["doctor"] = request.doctor
         return super().create(request, *args, **kwargs)
+
+    @action(detail=True, methods=["get"])
+    def scans(self, request, pk=None):
+        from datetime import datetime
+
+        patient = self.get_object()
+        breast_cancer = BreastCancer.objects.filter(patient=patient)
+        lung_cancer = LungCancer.objects.filter(patient=patient)
+        brain_cancer = BrainCancer.objects.filter(patient=patient)
+        skin_cancer = SkinCancer.objects.filter(patient=patient)
+
+        breast_cancer_serializer = BreastCancerSerializer(breast_cancer, many=True)
+        lung_cancer_serializer = LungCancerSerializer(lung_cancer, many=True)
+        brain_cancer_serializer = BrainCancerSerializer(brain_cancer, many=True)
+        skin_cancer_serializer = SkinCancerSerializer(skin_cancer, many=True)
+
+        data = []
+        iso_format = "%Y-%m-%dT%H:%M:%S.%fZ"
+
+        data.extend(
+            [
+                {
+                    "type": "breast",
+                    "timestamp": datetime.strptime(scan["created_at"], iso_format).strftime("%Y-%m-%d %H:%M:%S"),
+                    **scan,
+                }
+                for scan in breast_cancer_serializer.data
+            ]
+        )
+
+        data.extend(
+            [
+                {
+                    "type": "lungs",
+                    "timestamp": datetime.strptime(scan["created_at"], iso_format).strftime("%Y-%m-%d %H:%M:%S"),
+                    **scan,
+                }
+                for scan in lung_cancer_serializer.data
+            ]
+        )
+
+        data.extend(
+            [
+                {
+                    "type": "brain",
+                    "timestamp": datetime.strptime(scan["created_at"], iso_format).strftime("%Y-%m-%d %H:%M:%S"),
+                    **scan,
+                }
+                for scan in brain_cancer_serializer.data
+            ]
+        )
+
+        data.extend(
+            [
+                {
+                    "type": "skin",
+                    "timestamp": datetime.strptime(scan["created_at"], iso_format).strftime("%Y-%m-%d %H:%M:%S"),
+                    **scan,
+                }
+                for scan in skin_cancer_serializer.data
+            ]
+        )
+        
+        data = sorted(data, key=lambda x: x["timestamp"], reverse=True)
+        return Response(data)
 
 
 class BreastCancerViewSet(ModelViewSet):
