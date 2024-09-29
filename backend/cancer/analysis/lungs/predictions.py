@@ -1,33 +1,42 @@
 import numpy as np
-from tensorflow.keras.models import load_model as load_keras_model
 from tensorflow.keras.preprocessing import image
 
 from django.conf import settings
+from cancer.models import LungCancerReport
 
 
 class LungsAnalysis:
-    def __init__(self) -> None:
+    def __init__(self, *args, **kwargs) -> None:
         self.model_path = f"{settings.BASE_DIR}/models/lungs.keras"
         self.class_names = ["benign", "malignant", "no tumor detected"]
         self.load_model()
+        self.analyze(*args, **kwargs)
 
     def load_model(self):
-        self.model = load_keras_model(self.model_path)
+        from tensorflow.keras.models import load_model as load_keras_model
 
-    def load_and_preprocess_image(img_path, img_height, img_width):
+        self.model = load_keras_model(self.model_path, compile=False)
+
+    def load_and_preprocess_image(self, img_path, img_height, img_width):
         img = image.load_img(img_path, target_size=(img_height, img_width))
         img_array = image.img_to_array(img)
         img_array = np.expand_dims(img_array, axis=0)
         img_array /= 255.0
         return img_array
 
-    def analyze(self, img_path: str):
+    def analyze(self, img_path: str, report_id: str):
         result, predictions, predicted_class, img_array = self.predict(img_path)
         result_image_path, stats_image_path = self.save_plots(
             img_array, predictions, predicted_class
         )
 
-        # Save the report here
+        report = LungCancerReport.objects.get(id=report_id)
+        report.result_image = result_image_path.split("media/")[-1]
+        report.stats_image = stats_image_path.split("media/")[-1]
+        report.predicted_label = result
+        report.probs = predictions.tolist()[0]
+        report.status = LungCancerReport.Status.COMPLETE
+        report.save()
 
     def predict(self, img_path: str):
         img_height, img_width = 256, 256
@@ -42,6 +51,9 @@ class LungsAnalysis:
 
     def save_plots(self, img_array, predictions, predicted_class):
         import matplotlib.pyplot as plt
+        import matplotlib
+
+        matplotlib.use("Agg")
         import uuid
         import os
 
@@ -49,7 +61,6 @@ class LungsAnalysis:
 
         # First subplot: image and predicted class
         plt.subplot(1, 2, 1)
-        plt.imshow(image.array_to_img(img_array[0]))
         plt.axis("off")
         plt.title(f"Predicted: {self.class_names[predicted_class[0]]}")
 
@@ -61,7 +72,9 @@ class LungsAnalysis:
         plt.title("Prediction Probabilities")
 
         # Save the plot
-        result_image_path = f"{settings.BASE_DIR}/media/temp/lungs/{uuid.uuid4()}.jpg"
+        result_image_path = (
+            f"{settings.BASE_DIR}/media/reports/lungs/{uuid.uuid4()}.jpg"
+        )
         os.makedirs(os.path.dirname(result_image_path), exist_ok=True)
         plt.savefig(result_image_path, bbox_inches="tight")
         plt.close()
@@ -74,7 +87,7 @@ class LungsAnalysis:
         plt.title("Prediction Probabilities")
 
         # Save the plot
-        stats_image_path = f"{settings.BASE_DIR}/media/temp/lungs/{uuid.uuid4()}.jpg"
+        stats_image_path = f"{settings.BASE_DIR}/media/reports/lungs/{uuid.uuid4()}.jpg"
         os.makedirs(os.path.dirname(stats_image_path), exist_ok=True)
         plt.savefig(stats_image_path, bbox_inches="tight")
         plt.close()

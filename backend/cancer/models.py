@@ -63,6 +63,10 @@ class LungCancerReport(Report):
     cancer = models.OneToOneField(
         LungCancer, on_delete=models.CASCADE, related_name="report"
     )
+    result_image = models.URLField(null=True)
+    stats_image = models.URLField(null=True)
+    probs = models.JSONField(null=True)
+    predicted_label = models.CharField(max_length=200, null=True)
 
 
 class SkinCancerReport(Report):

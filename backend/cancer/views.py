@@ -32,7 +32,7 @@ from rest_framework.parsers import MultiPartParser
 
 # from cancer.analysis.breast.predictions import BreastAnalysis
 from cancer.analysis.brain.predictions import BrainAnalysis
-# from cancer.analysis.lungs.predictions import LungsAnalysis
+from cancer.analysis.lungs.predictions import LungsAnalysis
 
 
 class PatientViewSet(ModelViewSet):
@@ -75,12 +75,14 @@ class LungCancerViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         cancer = serializer.instance
+
         image_path = f"{settings.BASE_DIR}{cancer.mri.url}"
-        # threading.Thread(target=LungsAnalysis().predict, args=(image_path,)).start()
-        # LungsAnalysis().analyze(image_path)
         report_serializer = LungCancerReportSerializer(data={"cancer": cancer.id})
         report_serializer.is_valid(raise_exception=True)
         report_serializer.save()
+        report = report_serializer.instance
+
+        threading.Thread(target=LungsAnalysis, args=(image_path, report.id)).start()
 
         return Response(serializer.data)
 

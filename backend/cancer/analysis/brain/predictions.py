@@ -35,6 +35,7 @@ class BrainAnalysis:
         report.probs = probs.tolist()
         report.predicted_label = predicted_label
         report.max_prob = max_prob
+        report.status = BrainCancerReport.Status.COMPLETE
         report.save()
 
     def predict(self, img_path: str):
@@ -65,10 +66,10 @@ class BrainAnalysis:
 
         # Define the paths for the saved images
         result_image_path = (
-            f"{settings.BASE_DIR}/media/reports/lungs/{uuid.uuid4()}.jpg"
+            f"{settings.BASE_DIR}/media/reports/brain/{uuid.uuid4()}.jpg"
         )
         os.makedirs(os.path.dirname(result_image_path), exist_ok=True)
-        stats_image_path = f"{settings.BASE_DIR}/media/reports/lungs/{uuid.uuid4()}.jpg"
+        stats_image_path = f"{settings.BASE_DIR}/media/reports/brain/{uuid.uuid4()}.jpg"
         os.makedirs(os.path.dirname(stats_image_path), exist_ok=True)
 
         # Open the original image
