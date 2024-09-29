@@ -10,3 +10,4 @@ Pillow
 tensorflow
 matplotlib
 numpy
+opencv-python

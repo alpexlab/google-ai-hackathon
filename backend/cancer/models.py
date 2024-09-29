@@ -57,6 +57,8 @@ class BreastCancerReport(Report):
     cancer = models.OneToOneField(
         BreastCancer, on_delete=models.CASCADE, related_name="report"
     )
+    result_image = models.URLField(null=True)
+    stats_image = models.URLField(null=True)
 
 
 class LungCancerReport(Report):
