@@ -6,6 +6,8 @@ import os
 from django.conf import settings
 from cancer.models import BreastCancerReport
 
+from cancer.analysis.breast.segmentation import BreastSegmentation
+
 
 class BreastAnalysis:
     def __init__(self, *args, **kwargs) -> None:
@@ -24,6 +26,7 @@ class BreastAnalysis:
         result_image_path, stats_image_path = self.save_plots(
             image_path, prediction, pred_value
         )
+        BreastSegmentation(image_path, report_id)
 
         report = BreastCancerReport.objects.get(id=report_id)
         report.result_image = "/media/" + result_image_path.split("media/")[-1]

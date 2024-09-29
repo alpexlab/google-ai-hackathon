@@ -1,11 +1,12 @@
 import Patient_Profile from '@/components/details/patient_profile';
 import { Link, useSearchParams } from 'react-router-dom';
 import { DataTable } from './data-table';
-import { columns } from './columns';
+import { getColumns } from './columns';
 import { _SCAN } from '@/types';
 import { useEffect, useState } from 'react';
 import { getScans } from '@/services/backend';
 import Summary from './summary';
+import EasyNav from '@/components/breadcrumb';
 
 const Details = () => {
   const [params] = useSearchParams();
@@ -23,6 +24,7 @@ const Details = () => {
 
   return (
     <div>
+      <EasyNav patient={patientId} />
       <div className='m-5 grid grid-cols-3 gap-6'>
         <Patient_Profile patientId={patientId} />
         <div className='mt-4'>
@@ -33,7 +35,7 @@ const Details = () => {
             Add Scan
           </Link>
           <div className='mt-8'>
-            <DataTable columns={columns} data={scans} />
+            <DataTable columns={getColumns(patientId)} data={scans} />
           </div>
         </div>
       </div>

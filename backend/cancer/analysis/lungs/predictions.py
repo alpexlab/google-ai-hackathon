@@ -62,6 +62,7 @@ class LungsAnalysis:
 
         # First subplot: image and predicted class
         plt.subplot(1, 2, 1)
+        plt.imshow(image.array_to_img(img_array[0]))
         plt.axis("off")
         plt.title(f"Predicted: {self.class_names[predicted_class[0]]}")
 

@@ -65,6 +65,7 @@ class BreastCancerReport(Report):
     )
     result_image = models.URLField(null=True)
     stats_image = models.URLField(null=True)
+    segmented_image = models.URLField(null=True)
 
 
 class LungCancerReport(Report):
