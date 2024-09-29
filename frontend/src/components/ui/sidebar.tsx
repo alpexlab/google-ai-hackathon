@@ -15,6 +15,15 @@ const Sidebar = () => {
         </li>
         <li className='py-2'>
           <Link
+            to={'/chat'}
+            className='flex items-center space-x-2 bg-blue-500 text-white p-2 rounded-md'
+          >
+            <span>💬</span>
+            <span>Chat</span>
+          </Link>
+        </li>
+        <li className='py-2'>
+          <Link
             to={'/faq'}
             className='flex items-center space-x-2 bg-blue-500 text-white p-2 rounded-md'
           >

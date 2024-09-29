@@ -101,3 +101,14 @@ export const getLungReport = async (id: string) => {
   const response: AxiosResponse<_LUNG_REPORT> = await basicAxios(`/lungs/${id}/report/`);
   return response.data;
 };
+
+export const getChatResponse = async (message: string) => {
+  const options = {
+    method: 'POST',
+    withCredentials: true,
+    data: { message },
+  };
+
+  const response: AxiosResponse<string> = await basicAxios('/chat/', options);
+  return response.data;
+};

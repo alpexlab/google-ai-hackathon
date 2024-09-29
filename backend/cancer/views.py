@@ -4,6 +4,7 @@ from django.conf import settings
 
 from rest_framework.routers import DefaultRouter
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
@@ -248,6 +249,12 @@ class SkinCancerReportViewSet(ModelViewSet):
 class BrainCancerReportViewSet(ModelViewSet):
     queryset = BrainCancerReport.objects.all()
     serializer_class = BrainCancerReportSerializer
+
+
+class ChatAPIView(APIView):
+    def post(self, request):
+        message = request.data.get("message")
+        return Response(message)
 
 
 router = DefaultRouter()
