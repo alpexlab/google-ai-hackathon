@@ -22,7 +22,7 @@ export const BrainCard = ({ patientId }: { patientId: string }) => {
       });
 
       setTimeout(() => {
-        window.location.href = `/brain/${res.id}`;
+        window.location.href = `/brain/${res.id}/?patient=${patientId}`;
       }, 500);
     } catch (e) {
       toast({

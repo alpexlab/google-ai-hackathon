@@ -94,3 +94,8 @@ class BrainCancerReport(Report):
     probs = models.JSONField(null=True)
     predicted_label = models.CharField(max_length=200, null=True)
     max_prob = models.FloatField(null=True)
+
+
+class Notifications(models.Model):
+    doctor = models.EmailField()
+    message = models.CharField(max_length=200, null=True)

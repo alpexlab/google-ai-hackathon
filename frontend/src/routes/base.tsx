@@ -10,6 +10,7 @@ import Breast from '@/pages/report/Breast';
 import Lungs from '@/pages/report/Lungs';
 import FAQ from '@/pages/faq';
 import Chat from '@/pages/chat';
+import Notifications from '@/pages/notifications';
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: '/chat',
         element: <Chat />,
+      },
+      {
+        path: '/notifications',
+        element: <Notifications />,
       },
     ],
   },

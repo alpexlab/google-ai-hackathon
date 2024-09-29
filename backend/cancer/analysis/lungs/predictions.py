@@ -2,7 +2,7 @@ import numpy as np
 from tensorflow.keras.preprocessing import image
 
 from django.conf import settings
-from cancer.models import LungCancerReport
+from cancer.models import LungCancerReport, Notifications
 
 
 class LungsAnalysis:
@@ -24,7 +24,7 @@ class LungsAnalysis:
         img_array /= 255.0
         return img_array
 
-    def analyze(self, img_path: str, report_id: str):
+    def analyze(self, img_path: str, report_id: str, doctor: str):
         result, predictions, predicted_class, img_array = self.predict(img_path)
         result_image_path, stats_image_path = self.save_plots(
             img_array, predictions, predicted_class
@@ -38,6 +38,11 @@ class LungsAnalysis:
         report.max_prob = max(report.probs)
         report.status = LungCancerReport.Status.COMPLETE
         report.save()
+
+        Notifications.objects.create(
+            doctor=doctor,
+            message=f"Lung cancer analysis for {report.cancer.patient.name} (Registration No: {report.cancer.patient.id}) is completed. The report suggests {result} with a probability of {report.max_prob:.2f}. Please check the report for more details",
+        )
 
     def predict(self, img_path: str):
         img_height, img_width = 256, 256

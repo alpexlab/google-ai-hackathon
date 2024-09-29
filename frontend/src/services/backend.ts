@@ -112,3 +112,27 @@ export const getChatResponse = async (message: string) => {
   const response: AxiosResponse<string> = await basicAxios('/chat/', options);
   return response.data;
 };
+
+export const getNotificationCount = async () => {
+  const response: AxiosResponse<number> = await basicAxios('/notifications/count/');
+  return response.data;
+};
+
+export const getNotifications = async () => {
+  const response: AxiosResponse<
+    {
+      id: string;
+      message: string;
+    }[]
+  > = await basicAxios('/notifications/');
+  return response.data;
+};
+
+export const deleteNotification = async (id: string) => {
+  const options = {
+    method: 'DELETE',
+    withCredentials: true,
+  };
+
+  await basicAxios(`/notifications/${id}/`, options);
+};

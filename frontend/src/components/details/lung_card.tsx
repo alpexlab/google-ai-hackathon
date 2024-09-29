@@ -22,7 +22,7 @@ export const LungCard = ({ patientId }: { patientId: string }) => {
       });
 
       setTimeout(() => {
-        window.location.href = `/lungs/${res.id}`;
+        window.location.href = `/lungs/${res.id}/?patient=${patientId}`;
       }, 500);
     } catch (e) {
       toast({

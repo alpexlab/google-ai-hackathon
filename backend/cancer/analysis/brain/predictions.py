@@ -4,7 +4,7 @@ import os
 from PIL import Image
 
 from django.conf import settings
-from cancer.models import BrainCancerReport
+from cancer.models import BrainCancerReport, Notifications
 from cancer.analysis.brain.segmentation import BrainSegmentation
 
 
@@ -24,7 +24,7 @@ class BrainAnalysis:
 
         self.model = TFSMLayer(self.model_path, call_endpoint="serving_default")
 
-    def analyze(self, img_path: str, report_id: str):
+    def analyze(self, img_path: str, report_id: str, doctor: str):
         predicted_label, probs, max_prob, max_prob_idx = self.predict(img_path)
         result_image_path, stats_image_path = self.save_plots(
             img_path, predicted_label, probs, max_prob_idx
@@ -39,6 +39,11 @@ class BrainAnalysis:
         BrainSegmentation()
         report.status = BrainCancerReport.Status.COMPLETE
         report.save()
+
+        Notifications.objects.create(
+            doctor=doctor,
+            message=f"Brain cancer analysis for {report.cancer.patient.name} (Registration No: {report.cancer.patient.id}) is completed. The report suggests {predicted_label} with a probability of {max_prob:.2f}. Please check the report for more details",
+        )
 
     def predict(self, img_path: str):
         img = Image.open(img_path)

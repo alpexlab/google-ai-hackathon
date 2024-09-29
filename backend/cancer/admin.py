@@ -9,6 +9,7 @@ from cancer.models import (
     SkinCancerReport,
     BrainCancerReport,
     Patient,
+    Notifications,
 )
 
 # Register your models here.
@@ -21,3 +22,4 @@ admin.site.register(LungCancerReport)
 admin.site.register(SkinCancerReport)
 admin.site.register(BrainCancerReport)
 admin.site.register(Patient)
+admin.site.register(Notifications)

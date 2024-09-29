@@ -4,7 +4,7 @@ from PIL import Image
 import os
 
 from django.conf import settings
-from cancer.models import BreastCancerReport
+from cancer.models import BreastCancerReport, Notifications
 
 from cancer.analysis.breast.segmentation import BreastSegmentation
 
@@ -21,7 +21,7 @@ class BreastAnalysis:
 
         self.model = TFSMLayer(self.model_path, call_endpoint="serving_default")
 
-    def analyze(self, image_path: str, report_id: str):
+    def analyze(self, image_path: str, report_id: str, doctor: str):
         prediction, pred_value = self.predict(image_path)
         result_image_path, stats_image_path = self.save_plots(
             image_path, prediction, pred_value
@@ -34,6 +34,11 @@ class BreastAnalysis:
 
         report.status = BreastCancerReport.Status.COMPLETE
         report.save()
+
+        Notifications.objects.create(
+            doctor=doctor,
+            message=f"Breast cancer analysis for {report.cancer.patient.name} (Registration No: {report.cancer.patient.id}) is completed. The report suggests {'predicted_label'} with a probability of {'max_prob:.2f'}. Please check the report for more details",
+        )
 
     def predict(self, image_path: str):
         img = cv2.imread(image_path)

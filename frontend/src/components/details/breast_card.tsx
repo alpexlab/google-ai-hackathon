@@ -22,7 +22,7 @@ export const BreastCard = ({ patientId }: { patientId: string }) => {
       });
 
       setTimeout(() => {
-        window.location.href = `/breast/${res.id}`;
+        window.location.href = `/breast/${res.id}/?patient=${patientId}`;
       }, 500);
     } catch (e) {
       toast({

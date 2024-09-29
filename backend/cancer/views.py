@@ -18,6 +18,7 @@ from cancer.models import (
     SkinCancerReport,
     BrainCancerReport,
     Patient,
+    Notifications,
 )
 from cancer.serializers import (
     BreastCancerSerializer,
@@ -29,6 +30,7 @@ from cancer.serializers import (
     SkinCancerReportSerializer,
     BrainCancerReportSerializer,
     PatientSerializer,
+    NotificationsSerializer,
 )
 from rest_framework.parsers import MultiPartParser
 from rest_framework.decorators import action
@@ -139,7 +141,9 @@ class BreastCancerViewSet(ModelViewSet):
         report_serializer.save()
         report = report_serializer.instance
 
-        threading.Thread(target=BreastAnalysis, args=(image_path, report.id)).start()
+        threading.Thread(
+            target=BreastAnalysis, args=(image_path, report.id, request.doctor)
+        ).start()
 
         return Response(serializer.data)
 
@@ -173,7 +177,9 @@ class LungCancerViewSet(ModelViewSet):
         report_serializer.save()
         report = report_serializer.instance
 
-        threading.Thread(target=LungsAnalysis, args=(image_path, report.id)).start()
+        threading.Thread(
+            target=LungsAnalysis, args=(image_path, report.id, request.doctor)
+        ).start()
 
         return Response(serializer.data)
 
@@ -212,7 +218,9 @@ class BrainCancerViewSet(ModelViewSet):
         report_serializer.is_valid(raise_exception=True)
         report_serializer.save()
         report = report_serializer.instance
-        threading.Thread(target=BrainAnalysis, args=(image_path, report.id)).start()
+        threading.Thread(
+            target=BrainAnalysis, args=(image_path, report.id, request.doctor)
+        ).start()
 
         return Response(serializer.data)
 
@@ -251,6 +259,18 @@ class BrainCancerReportViewSet(ModelViewSet):
     serializer_class = BrainCancerReportSerializer
 
 
+class NotificationsViewSet(ModelViewSet):
+    serializer_class = NotificationsSerializer
+
+    def get_queryset(self):
+        return Notifications.objects.filter(doctor=self.request.doctor)
+
+    @action(detail=False, methods=["get"])
+    def count(self, request):
+        count = self.get_queryset().count()
+        return Response(count)
+
+
 class ChatAPIView(APIView):
     def post(self, request):
         message = request.data.get("message")
@@ -267,3 +287,4 @@ router.register("lung-report", LungCancerReportViewSet)
 router.register("skin-report", SkinCancerReportViewSet)
 router.register("brain-report", BrainCancerReportViewSet)
 router.register("patients", PatientViewSet, basename="patient")
+router.register("notifications", NotificationsViewSet, basename="notifications")
