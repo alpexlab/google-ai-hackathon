@@ -1,13 +1,14 @@
-from keras.layers import TFSMLayer
 import numpy as np
-from PIL import Image
 import os
 
+from PIL import Image
+
 from django.conf import settings
+from cancer.models import BrainCancerReport
 
 
 class BrainAnalysis:
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.model_path = f"{settings.BASE_DIR}/models/brain_tumor"
 
         self.class_dict = {"glioma": 0, "meningioma": 1, "notumor": 2, "pituitary": 3}
@@ -15,20 +16,30 @@ class BrainAnalysis:
         self.label = list(self.class_dict.keys())
 
         self.load_model()
+        self.analyze(*args, **kwargs)
 
     def load_model(self):
+        from keras.layers import TFSMLayer
+
         self.model = TFSMLayer(self.model_path, call_endpoint="serving_default")
 
-    def analyze(self, img_path: str):
+    def analyze(self, img_path: str, report_id: str):
         predicted_label, probs, max_prob, max_prob_idx = self.predict(img_path)
         result_image_path, stats_image_path = self.save_plots(
             img_path, predicted_label, probs, max_prob_idx
         )
 
-        # Save the report here
+        report = BrainCancerReport.objects.get(id=report_id)
+        report.result_image = result_image_path.split("media/")[-1]
+        report.stats_image = stats_image_path.split("media/")[-1]
+        report.probs = probs.tolist()
+        report.predicted_label = predicted_label
+        report.max_prob = max_prob
+        report.save()
 
     def predict(self, img_path: str):
         img = Image.open(img_path)
+        img = img.convert("RGB")
         resized_img = img.resize((299, 299))
         img = np.asarray(resized_img)
         img = np.expand_dims(img, axis=0)
@@ -46,20 +57,29 @@ class BrainAnalysis:
     def save_plots(
         self, img_path: str, predicted_label: str, probs: list, max_prob_idx
     ):
+        import matplotlib
+
+        matplotlib.use("Agg")
         import matplotlib.pyplot as plt
         import uuid
 
-        result_image_path = f"{settings.BASE_DIR}/media/temp/lungs/{uuid.uuid4()}.jpg"
+        # Define the paths for the saved images
+        result_image_path = (
+            f"{settings.BASE_DIR}/media/reports/lungs/{uuid.uuid4()}.jpg"
+        )
         os.makedirs(os.path.dirname(result_image_path), exist_ok=True)
-        stats_image_path = f"{settings.BASE_DIR}/media/temp/lungs/{uuid.uuid4()}.jpg"
+        stats_image_path = f"{settings.BASE_DIR}/media/reports/lungs/{uuid.uuid4()}.jpg"
         os.makedirs(os.path.dirname(stats_image_path), exist_ok=True)
 
-        # Create image with predicted label
+        # Open the original image
         original_img = Image.open(img_path)
+
+        # Plot and save the original image with predicted label
         plt.imshow(original_img)
         plt.title(
             f"Predicted: {predicted_label} with probability: {probs[max_prob_idx]:.2f}"
         )
+        plt.axis("off")  # Hide axis for the image
         plt.savefig(result_image_path)
         plt.close()
 
@@ -72,6 +92,7 @@ class BrainAnalysis:
         ax = plt.gca()
         ax.bar_label(bars, fmt="%.2f")
 
+        # Save the bar plot
         plt.savefig(stats_image_path)
         plt.close()
 

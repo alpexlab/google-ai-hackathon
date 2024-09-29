@@ -31,7 +31,7 @@ from cancer.serializers import (
 from rest_framework.parsers import MultiPartParser
 
 # from cancer.analysis.breast.predictions import BreastAnalysis
-# from cancer.analysis.brain.predictions import BrainAnalysis
+from cancer.analysis.brain.predictions import BrainAnalysis
 # from cancer.analysis.lungs.predictions import LungsAnalysis
 
 
@@ -105,9 +105,7 @@ class BrainCancerViewSet(ModelViewSet):
         report_serializer.is_valid(raise_exception=True)
         report_serializer.save()
         report = report_serializer.instance
-        # threading.Thread(
-        #     target=BrainAnalysis().analyze, args=(image_path, report.id)
-        # ).start()
+        threading.Thread(target=BrainAnalysis, args=(image_path, report.id)).start()
 
         return Response(serializer.data)
 
