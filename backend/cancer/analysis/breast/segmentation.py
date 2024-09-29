@@ -5,6 +5,7 @@ import os
 from django.conf import settings
 from cancer.models import BreastCancerReport
 
+
 class BreastSegmentation:
     def __init__(self, *args, **kwargs) -> None:
         self.model_path = f"{settings.BASE_DIR}/models/breast-segmentation"
@@ -14,6 +15,7 @@ class BreastSegmentation:
 
     def load_model(self):
         from tensorflow.keras.models import load_model
+
         self.model = load_model(self.model_path)
 
     def preprocess_image(self, image_path: str, target_size: tuple):
@@ -32,7 +34,7 @@ class BreastSegmentation:
         report.save()
 
     def predict(self, image_path: str):
-        target_size = (256, 256)  
+        target_size = (256, 256)
         new_image = self.preprocess_image(image_path, target_size)
         predicted_mask = self.model.predict(new_image)
         predicted_mask = np.squeeze(predicted_mask)
@@ -51,18 +53,18 @@ class BreastSegmentation:
         os.makedirs(os.path.dirname(segmented_image_path), exist_ok=True)
 
         original_image = Image.open(image_path)
-        
+
         plt.figure(figsize=(10, 5))
 
         plt.subplot(1, 2, 1)
         plt.imshow(original_image)
-        plt.title('Original Image')
-        plt.axis('off')
+        plt.title("Original Image")
+        plt.axis("off")
 
         plt.subplot(1, 2, 2)
-        plt.imshow(predicted_mask, cmap='jet')
-        plt.title('Predicted Tumor')
-        plt.axis('off')
+        plt.imshow(predicted_mask, cmap="jet")
+        plt.title("Predicted Tumor")
+        plt.axis("off")
         plt.tight_layout()
         plt.savefig(segmented_image_path)
         plt.close()

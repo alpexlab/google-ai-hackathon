@@ -1,6 +1,6 @@
 import { BACKEND_URL } from '@/const';
-import { getBrainReport } from '@/services/backend';
-import { _BRAIN_REPORT } from '@/types';
+import { getBreastReport } from '@/services/backend';
+import { _BREAST_REPORT } from '@/types';
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 
@@ -10,15 +10,15 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import EasyNav from '@/components/breadcrumb';
 
-const Brain = () => {
+const Breast = () => {
   const { id } = useParams<{ id: string }>();
-  const [report, setReport] = useState<_BRAIN_REPORT>();
+  const [report, setReport] = useState<_BREAST_REPORT>();
   const [params] = useSearchParams();
   const patientId = params.get('patient') as string;
 
   useEffect(() => {
     async function fetchReport() {
-      const response = await getBrainReport(id as string);
+      const response = await getBreastReport(id as string);
       let mri = response.cancer.mri as string;
       let result_image = response.report.result_image;
       let stats_image = response.report.stats_image;
@@ -55,7 +55,7 @@ const Brain = () => {
       <div className='container mx-auto p-6'>
         <Card className='max-w-5xl mx-auto shadow-lg p-6'>
           <CardHeader>
-            <CardTitle className='text-3xl font-bold'>Brain Cancer Report</CardTitle>
+            <CardTitle className='text-3xl font-bold'>Breast Cancer Report</CardTitle>
           </CardHeader>
           <CardContent className='space-y-6'>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
@@ -167,4 +167,4 @@ const Brain = () => {
   );
 };
 
-export default Brain;
+export default Breast;

@@ -49,10 +49,21 @@ export type _BRAIN_REPORT = {
   };
 };
 
-export type _BREAST_REPORT = {};
+export type _BREAST_REPORT = {
+  cancer: _BREAST_CANCER;
+  report: {
+    result_image: string;
+    stats_image: string;
+    probs: number[];
+    predicted_label: string;
+    max_prob: string;
+    classes: string[];
+    status: string;
+  };
+};
 
 export type _LUNG_REPORT = {
-  cancer: _BRAIN_CANCER;
+  cancer: _LUNG_CANCER;
   report: {
     result_image: string;
     stats_image: string;

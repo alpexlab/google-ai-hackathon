@@ -38,9 +38,11 @@ from cancer.analysis.lungs.predictions import LungsAnalysis
 
 
 class PatientViewSet(ModelViewSet):
-    queryset = Patient.objects.all()
     serializer_class = PatientSerializer
     parser_classes = [MultiPartParser]
+
+    def get_queryset(self):
+        return Patient.objects.filter(doctor=self.request.doctor)
 
     def create(self, request, *args, **kwargs):
         request.data["doctor"] = request.doctor
@@ -139,6 +141,19 @@ class BreastCancerViewSet(ModelViewSet):
         threading.Thread(target=BreastAnalysis, args=(image_path, report.id)).start()
 
         return Response(serializer.data)
+
+    @action(detail=True, methods=["get"])
+    def report(self, request, pk=None):
+        cancer = get_object_or_404(BreastCancer, pk=pk)
+        report = cancer.report
+        data = {
+            "cancer": BreastCancerSerializer(cancer).data,
+            "report": {
+                **BreastCancerReportSerializer(report).data,
+            },
+        }
+
+        return Response(data)
 
 
 class LungCancerViewSet(ModelViewSet):
@@ -244,4 +259,4 @@ router.register("breast-report", BreastCancerReportViewSet)
 router.register("lung-report", LungCancerReportViewSet)
 router.register("skin-report", SkinCancerReportViewSet)
 router.register("brain-report", BrainCancerReportViewSet)
-router.register("patients", PatientViewSet)
+router.register("patients", PatientViewSet, basename="patient")

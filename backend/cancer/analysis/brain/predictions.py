@@ -5,6 +5,7 @@ from PIL import Image
 
 from django.conf import settings
 from cancer.models import BrainCancerReport
+from cancer.analysis.brain.segmentation import BrainSegmentation
 
 
 class BrainAnalysis:
@@ -35,6 +36,7 @@ class BrainAnalysis:
         report.probs = probs.tolist()
         report.predicted_label = predicted_label
         report.max_prob = max_prob
+        BrainSegmentation()
         report.status = BrainCancerReport.Status.COMPLETE
         report.save()
 

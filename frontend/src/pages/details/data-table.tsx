@@ -34,6 +34,13 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+
+  // Add pagination state
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 4, // Default page size
+  });
+
   const table = useReactTable({
     data,
     columns,
@@ -48,7 +55,10 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
       sorting,
       columnFilters,
       columnVisibility,
+      pagination, // Include pagination state in table state
     },
+    // Add manual pagination handling
+    onPaginationChange: setPagination,
   });
 
   return (
