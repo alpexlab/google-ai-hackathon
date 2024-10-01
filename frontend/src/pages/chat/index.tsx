@@ -15,17 +15,32 @@ const Chat = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSendMessage = async () => {
+    const question = input.trim();
     setLoading(true);
-    if (!input.trim()) return;
+    setInput('');
 
-    const newMessage: _MESSAGE = { sender: 'user', content: input };
+    if (!question) return;
+
+    const newMessage: _MESSAGE = { sender: 'user', content: question };
     setMessages((prevMessages) => [...prevMessages, newMessage]);
 
-    const response = await getChatResponse(input);
-    setMessages((prevMessages) => [...prevMessages, { sender: 'bot', content: response }]);
+    let response = 'Gemini is not available right now. Please try again later';
+    try {
+      setMessages((prevMessages) => [...prevMessages, { sender: 'bot', content: 'Thinking...' }]);
+      response = await getChatResponse(question);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+
+    setMessages((prevMessages) => {
+      const lastMessage = prevMessages[prevMessages.length - 1];
+      if (lastMessage.sender === 'bot' && lastMessage.content === 'Thinking...') {
+        prevMessages.pop();
+      }
+      return [...prevMessages, { sender: 'bot', content: response }];
+    });
 
     setLoading(false);
-    setInput('');
   };
 
   return (

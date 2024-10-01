@@ -274,7 +274,10 @@ class NotificationsViewSet(ModelViewSet):
 class ChatAPIView(APIView):
     def post(self, request):
         message = request.data.get("message")
-        return Response(message)
+        from cancer.analysis.gemini.chat import RagManager
+
+        answer = RagManager().get_answer(message)
+        return Response(answer)
 
 
 router = DefaultRouter()
