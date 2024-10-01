@@ -13,7 +13,7 @@ export default function Login() {
 
   useEffect(() => {
     if (email) {
-      navigate('/');
+      navigate('/u');
     }
     setShow(true);
   }, [email, navigate]);

@@ -6,7 +6,7 @@ const Sidebar = () => {
       <ul className='text-black'>
         <li className='py-2'>
           <Link
-            to={'/'}
+            to={'/u'}
             className='flex items-center space-x-2 bg-blue-500 text-white p-2 rounded-md'
           >
             <span>👤</span>

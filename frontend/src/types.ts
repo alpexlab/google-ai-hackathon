@@ -12,6 +12,13 @@ export type _PATIENT = {
   summary?: string;
 };
 
+export type _SURVIVAL = {
+  tstage: string;
+  nstage: string;
+  mstage: string;
+  type: string;
+};
+
 export type _SCAN = {
   id: string;
   type: string;
