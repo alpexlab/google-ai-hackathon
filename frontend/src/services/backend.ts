@@ -7,6 +7,7 @@ import {
   _LUNG_REPORT,
   _PATIENT,
   _SCAN,
+  _SURVIVAL,
 } from '@/types';
 import { basicAxios } from './basicAxios';
 import type { AxiosResponse } from 'axios';
@@ -110,6 +111,20 @@ export const getChatResponse = async (message: string) => {
   };
 
   const response: AxiosResponse<string> = await basicAxios('/chat/', options);
+  return response.data;
+};
+
+export const getSurvivalResponse = async (form: _SURVIVAL, patientId: string) => {
+  const options = {
+    method: 'POST',
+    withCredentials: true,
+    data: form,
+  };
+
+  const response: AxiosResponse<string> = await basicAxios(
+    `/patients/${patientId}/survival/`,
+    options
+  );
   return response.data;
 };
 

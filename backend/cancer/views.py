@@ -32,7 +32,7 @@ from cancer.serializers import (
     PatientSerializer,
     NotificationsSerializer,
 )
-from rest_framework.parsers import MultiPartParser
+from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.decorators import action
 
 from cancer.analysis.breast.predictions import BreastAnalysis
@@ -42,7 +42,7 @@ from cancer.analysis.lungs.predictions import LungsAnalysis
 
 class PatientViewSet(ModelViewSet):
     serializer_class = PatientSerializer
-    parser_classes = [MultiPartParser]
+    parser_classes = [MultiPartParser, JSONParser]
 
     def get_queryset(self):
         return Patient.objects.filter(doctor=self.request.doctor)
@@ -123,6 +123,38 @@ class PatientViewSet(ModelViewSet):
 
         data = sorted(data, key=lambda x: x["timestamp"], reverse=True)
         return Response(data)
+
+    @action(detail=True, methods=["POST"])
+    def survival(self, request, pk=None):
+        from cancer.analysis.gemini.llm import Gemini
+
+        patient = self.get_object()
+        tstage = request.data.get("tstage")
+        nstage = request.data.get("nstage")
+        mstage = request.data.get("mstage")
+        type = request.data.get("type")
+
+        prompt = """
+        Please predict the 5-year survival rate for the following patient based on the provided attributes.
+        - T Stage: {tstage}
+        - N Stage: {nstage}
+        - M Stage: {mstage}
+        - Cancer Type: {type}
+        - Age: {age}
+        - Medical History: {history}
+        """.format(
+            tstage=tstage,
+            nstage=nstage,
+            mstage=mstage,
+            type=type,
+            age=patient.age,
+            history=patient.medical_history,
+        )
+
+        gemini = Gemini()
+        message = gemini.generate_answer(prompt)
+
+        return Response(message)
 
 
 class BreastCancerViewSet(ModelViewSet):

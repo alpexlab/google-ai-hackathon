@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { getPatient, getScans } from '@/services/backend';
 import Summary from './summary';
 import EasyNav from '@/components/breadcrumb';
+import SurvivalCalculator from '@/components/survival';
 
 type _PROFILE = {
   details: {
@@ -61,12 +62,15 @@ const Details = () => {
       <div className='m-5 grid grid-cols-3 gap-6'>
         <Patient_Profile profile={patient} />
         <div className='mt-4'>
-          <Link
-            to={`/add-scan?patient=${patientId}`}
-            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
-          >
-            Add Scan
-          </Link>
+          <div className='flex'>
+            <Link
+              to={`/add-scan?patient=${patientId}`}
+              className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+            >
+              Add Scan
+            </Link>
+            <SurvivalCalculator patientId={patientId} />
+          </div>
           <div className='mt-8'>
             <DataTable columns={getColumns(patientId)} data={scans} />
           </div>
