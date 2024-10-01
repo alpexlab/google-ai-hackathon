@@ -46,7 +46,7 @@ const Chat = () => {
   return (
     <div className='flex h-screen bg-gray-50'>
       <Sidebar />
-      <div className='w-full flex flex-col'>
+      <div className='w-full flex flex-col flex-1'>
         {/* Header */}
         <div className='bg-white text-gray-800 p-4 shadow-md flex justify-between items-center'>
           <h1 className='text-2xl font-bold'>Chat</h1>
@@ -56,23 +56,49 @@ const Chat = () => {
         {/* Chat Window */}
         <div className='flex-grow bg-white m-4 flex flex-col rounded-lg shadow-lg overflow-hidden'>
           <div className='p-4 overflow-y-auto flex-grow scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 scrollbar-thumb-rounded scrollbar-track-rounded'>
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} my-2`}
-              >
-                <div
-                  className={`rounded-md p-1 px-4 max-w-xs ${
-                    message.sender === 'user'
-                      ? 'bg-gradient-to-r from-blue-400 to-blue-500 text-white'
-                      : 'bg-gray-200 text-gray-800'
-                  } shadow-md relative`}
-                  style={{ wordWrap: 'break-word' }}
-                >
-                  <p className='text-sm leading-relaxed'>{message.content}</p>
+            {messages.length === 0 ? (
+              // Display card when there are no messages
+              <div className='flex justify-center items-center h-full'>
+                <div className='bg-white shadow-lg rounded-lg p-6 text-center border border-gray-300'>
+                  <h2 className='text-xl font-semibold text-blue-600'>Learn About Cancer</h2>
+                  <p className='mt-3 text-gray-700'>
+                    Here are some resources to help you understand cancer better:
+                  </p>
+                  <ul className='mt-4 space-y-3 text-left'>
+                    <li className='flex items-center'>
+                      <div className='w-2.5 h-2.5 bg-blue-500 rounded-full mr-2'></div>
+                      Early detection is key!
+                    </li>
+                    <li className='flex items-center'>
+                      <div className='w-2.5 h-2.5 bg-blue-500 rounded-full mr-2'></div>
+                      Symptoms to watch for.
+                    </li>
+                    <li className='flex items-center'>
+                      <div className='w-2.5 h-2.5 bg-blue-500 rounded-full mr-2'></div>
+                      Lifestyle changes that can help.
+                    </li>
+                  </ul>
                 </div>
               </div>
-            ))}
+            ) : (
+              messages.map((message, index) => (
+                <div
+                  key={index}
+                  className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} my-2`}
+                >
+                  <div
+                    className={`rounded-md p-1 px-4 max-w-xs ${
+                      message.sender === 'user'
+                        ? 'bg-gradient-to-r from-blue-400 to-blue-500 text-white'
+                        : 'bg-gray-200 text-gray-800'
+                    } shadow-md relative`}
+                    style={{ wordWrap: 'break-word' }}
+                  >
+                    <p className='text-sm leading-relaxed'>{message.content}</p>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
 
           <div className='p-4 bg-white border-t flex items-center gap-2'>

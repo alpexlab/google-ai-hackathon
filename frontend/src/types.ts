@@ -1,5 +1,6 @@
 export type _AUTH_CONTEXT = {
   email: string | undefined;
+  last_sign_in?: string | undefined;
 };
 
 export type _PATIENT = {

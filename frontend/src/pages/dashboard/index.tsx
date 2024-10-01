@@ -103,7 +103,7 @@ const WelcomePage = () => {
                     <option value='model'>Model Training and Accuracy</option>
                     <option value='security'>Data Security and Privacy</option>
                     <option value='bestPractices'>Best Practices for Data Input</option>
-                    <option value='outputs'>How to Handle Outputs and Interpret Results</option>
+                    <option value='download_sample_images'>Download Sample Images</option>
                   </select>
                 </div>
 

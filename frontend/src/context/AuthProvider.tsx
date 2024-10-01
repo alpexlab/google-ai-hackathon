@@ -6,6 +6,7 @@ import { Session } from '@supabase/gotrue-js';
 
 const AuthContext = createContext<_AUTH_CONTEXT>({
   email: undefined,
+  last_sign_in: undefined,
 });
 
 export function useAuth() {
@@ -36,6 +37,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   const value = {
     email: session?.user.email,
+    last_sign_in: session?.user.last_sign_in_at,
   };
 
   if (loading) {

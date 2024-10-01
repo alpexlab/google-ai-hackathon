@@ -34,8 +34,8 @@ export const BrainCard = ({ patientId }: { patientId: string }) => {
     }
   };
   return (
-    <div className='mx-auto '>
-      <div className='m-5 font-bold'>Upload MRI Scans of the Brain</div>
+    <div className='mx-auto'>
+      {/* <div className='m-5 font-bold'>Upload MRI Scans of the Brain</div> */}
       <div>
         <div className='w-full max-w-4xl mx-auto min-h-48 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg'>
           <FileUpload

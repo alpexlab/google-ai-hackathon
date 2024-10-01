@@ -52,7 +52,7 @@ export const FileUpload = ({ onChange }: { onChange?: (files: File[]) => void })
       <motion.div
         onClick={handleClick}
         whileHover='animate'
-        className='p-10 group/file block rounded-lg cursor-pointer w-full relative overflow-hidden'
+        className='p-4 group/file block rounded-lg cursor-pointer w-full relative overflow-hidden'
       >
         <input
           ref={fileInputRef}

@@ -23,7 +23,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className='bg-gray-800 p-4 flex justify-between items-center'>
+    <nav className='bg-gray-800 p-2 px-6 flex justify-between items-center'>
       <div className='flex items-center'>
         <a href='/'>
           <img src={logo} className='h-[50px]' alt='Canceralyze' />
