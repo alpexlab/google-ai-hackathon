@@ -44,6 +44,9 @@ class LungsAnalysis:
             message=f"Lung cancer analysis for {report.cancer.patient.name} (Registration No: {report.cancer.patient.id}) is completed. The report suggests {result} with a probability of {report.max_prob:.2f}. Please check the report for more details",
         )
 
+        patient = report.cancer.patient
+        patient.generate_summary()
+
     def predict(self, img_path: str):
         img_height, img_width = 256, 256
         img_array = self.load_and_preprocess_image(img_path, img_height, img_width)

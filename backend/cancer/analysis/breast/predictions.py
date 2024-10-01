@@ -1,5 +1,4 @@
 import numpy as np
-import cv2
 from PIL import Image
 import os
 
@@ -41,6 +40,7 @@ class BreastAnalysis:
         )
 
     def predict(self, image_path: str):
+        import cv2
         img = cv2.imread(image_path)
         img = cv2.resize(img, (128, 128))
         img = np.array(img) / 255.0

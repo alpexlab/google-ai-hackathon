@@ -2,16 +2,24 @@ import Patient_Profile from '@/components/details/patient_profile';
 import { Link, useSearchParams } from 'react-router-dom';
 import { DataTable } from './data-table';
 import { getColumns } from './columns';
-import { _SCAN } from '@/types';
+import { _PATIENT, _SCAN } from '@/types';
 import { useEffect, useState } from 'react';
-import { getScans } from '@/services/backend';
+import { getPatient, getScans } from '@/services/backend';
 import Summary from './summary';
 import EasyNav from '@/components/breadcrumb';
+
+type _PROFILE = {
+  details: {
+    name: string;
+    value: string | number;
+  }[];
+} & _PATIENT;
 
 const Details = () => {
   const [params] = useSearchParams();
   const patientId = params.get('patient') as string;
   const [scans, setScans] = useState<_SCAN[]>([]);
+  const [patient, setPatient] = useState<_PROFILE>();
 
   useEffect(() => {
     async function fetchScans() {
@@ -19,14 +27,39 @@ const Details = () => {
       setScans(response);
     }
 
+    async function fetchPatient() {
+      const res = await getPatient(patientId);
+      const details = [
+        {
+          name: 'Email',
+          value: res.email,
+        },
+        {
+          name: 'Age',
+          value: res.age,
+        },
+        {
+          name: 'Medical History',
+          value: res.medical_history,
+        },
+      ];
+
+      res.photo =
+        res.photo ||
+        'https://img.freepik.com/free-photo/beautiful-woman-standing-against-yellow-wall_23-2148204587.jpg?size=626&ext=jpg';
+
+      setPatient({ ...res, details });
+    }
+
     fetchScans();
+    fetchPatient();
   }, []);
 
   return (
     <div>
       <EasyNav patient={patientId} />
       <div className='m-5 grid grid-cols-3 gap-6'>
-        <Patient_Profile patientId={patientId} />
+        <Patient_Profile profile={patient} />
         <div className='mt-4'>
           <Link
             to={`/add-scan?patient=${patientId}`}
@@ -40,7 +73,7 @@ const Details = () => {
         </div>
       </div>
       <div>
-        <Summary />
+        <Summary summary={patient?.summary} />
       </div>
     </div>
   );

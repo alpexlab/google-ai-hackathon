@@ -9,6 +9,7 @@ export type _PATIENT = {
   email: string;
   medical_history: string;
   photo: string | File | null;
+  summary?: string;
 };
 
 export type _SCAN = {

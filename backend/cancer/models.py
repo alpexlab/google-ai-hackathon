@@ -8,9 +8,36 @@ class Patient(models.Model):
     email = models.EmailField(null=True)
     medical_history = models.TextField(null=True)
     photo = models.ImageField(upload_to="patients", blank=True, null=True)
+    summary = models.TextField(null=True)
 
     def __str__(self):
         return self.name
+
+    def generate_summary(self):
+        from cancer.analysis.gemini.summary import analyze_mri_results
+
+        cancers = []
+
+        # cancer.extend(BreastCancer.objects.filter(patient=self))
+        cancers.extend(LungCancer.objects.filter(patient=self))
+        cancers.extend(SkinCancer.objects.filter(patient=self))
+        # cancer.extend(BrainCancer.objects.filter(patient=self))
+
+        mri_results = []
+
+        for cancer in cancers:
+            mri_results.append(
+                {
+                    "predicted_label": cancer.report.predicted_label,
+                    "max_prob": cancer.report.max_prob,
+                    "type": cancer.__class__.__name__,
+                    "classes": {},
+                }
+            )
+
+        summary = analyze_mri_results(mri_results, self.medical_history)
+        self.summary = summary
+        self.save()
 
 
 class Cancer(models.Model):

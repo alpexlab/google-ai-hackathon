@@ -15,6 +15,5 @@ class Gemini:
             temperature=temperature,
         )
 
-    def generate_answer(self, question: str, context: str, prompt_template: str) -> str:
-        formatted_prompt = prompt_template.format(context=context, question=question)
-        return self.model({"prompt": formatted_prompt})["output"]
+    def generate_answer(self, formatted_prompt: str) -> str:
+        return self.model.invoke(formatted_prompt).content
