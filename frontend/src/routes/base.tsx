@@ -8,13 +8,17 @@ import AddScan from '@/pages/details/AddScan';
 import Brain from '@/pages/report/Brain';
 import Breast from '@/pages/report/Breast';
 import Lungs from '@/pages/report/Lungs';
-import FAQ from '@/pages/faq';
 import Chat from '@/pages/chat';
 import Notifications from '@/pages/notifications';
+import WelcomePage from '@/pages/dashboard';
 
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <WelcomePage />,
+  },
+  {
+    path: '',
     element: (
       <AuthRequired>
         <RootLayout />
@@ -22,7 +26,7 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        index: true,
+        path: '/u',
         element: <Home />,
       },
       {
@@ -44,10 +48,6 @@ const router = createBrowserRouter([
       {
         path: '/lungs/:id',
         element: <Lungs />,
-      },
-      {
-        path: '/faq',
-        element: <FAQ />,
       },
       {
         path: '/chat',

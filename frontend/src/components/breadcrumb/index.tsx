@@ -12,7 +12,7 @@ const EasyNav = ({ patient, report }: { patient: string; report?: string }) => {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <Link to='/'>Home</Link>
+            <Link to='/u'>Home</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>

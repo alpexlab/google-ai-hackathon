@@ -4,7 +4,6 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/accordion';
-import Sidebar from '@/components/ui/sidebar';
 
 const FAQ = () => {
   const faqItems = [
@@ -35,7 +34,6 @@ const FAQ = () => {
 
   return (
     <div className='flex'>
-      <Sidebar />
       <div className='w-[600px] m-6'>
         <h2 className='text-2xl font-semibold mb-4'>Frequently Asked Questions</h2>
         <Accordion type='multiple' className='space-y-4'>
