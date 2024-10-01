@@ -104,7 +104,7 @@ const SurvivalCalculator = ({ patientId }: { patientId: string }) => {
 
           {/* Result */}
           <div className='mt-6 text-lg text-center'>
-            <Markdown>{result}</Markdown>
+            <Markdown className={'text-left text-sm'}>{result}</Markdown>
           </div>
         </div>
         <DialogFooter>

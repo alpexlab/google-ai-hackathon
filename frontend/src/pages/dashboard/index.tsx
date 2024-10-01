@@ -4,10 +4,10 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { documentationContent } from './documentation';
-import abhyuday from '@/assets/logo.png';
-import nikhil from '@/assets/logo.png';
-import ayush from '@/assets/logo.png';
-import harshita from '@/assets/logo.png';
+import abhyuday from '@/assets/abhyuday.png';
+import nikhil from '@/assets/nikhil.png';
+import ayush from '@/assets/ayush.png';
+import harshita from '@/assets/harshita.png';
 
 const WelcomePage = () => {
   const [activeDoc, setActiveDoc] = useState<string>('api');
@@ -41,6 +41,21 @@ const WelcomePage = () => {
           <p className='text-gray-700 text-sm font-medium'>
             Submission for <span className='font-bold'>Google AI Hackathon | Glance</span>
           </p>
+        </div>
+
+        {/* Demo Section */}
+        <div className='w-full max-w-4xl px-4 mb-12'>
+          <h2 className='text-3xl font-semibold text-center mb-6'>Demo Video</h2>
+          <div className='flex justify-center'>
+            <iframe
+              width='560'
+              height='315'
+              src='https://www.youtube.com/embed/w5ebcowAJD8'
+              title='Canceralyze Demo'
+              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+              allowFullScreen
+            ></iframe>
+          </div>
         </div>
 
         {/* Tabs Section */}
