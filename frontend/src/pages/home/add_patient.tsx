@@ -86,7 +86,6 @@ export function AddPatient() {
                 type='file'
                 className='col-span-2 h-8'
                 onChange={(e) => {
-                  const file = e.target.files?.[0];
                   setPatient({ ...patient, photo: e.target.files?.[0] ?? null });
                 }}
               />
