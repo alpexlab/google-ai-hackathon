@@ -1,6 +1,5 @@
 node_modules
 dist
-docker
 .env*
 .git
 .github

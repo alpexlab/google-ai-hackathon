@@ -1,4 +1,5 @@
 DEV_DOCKER_COMPOSE := "docker/dev.docker-compose.yml"
+PROD_DOCKER_COMPOSE := "docker/prod.docker-compose.yml"
 
 run:
 	docker compose -f $(DEV_DOCKER_COMPOSE) up --build -d
@@ -23,3 +24,6 @@ lint:
 
 prettier:
 	docker exec -it frontend npm run prettier
+
+prod-up:
+	docker compose -f $(PROD_DOCKER_COMPOSE) up --build -d
