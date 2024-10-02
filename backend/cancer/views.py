@@ -311,6 +311,19 @@ class ChatAPIView(APIView):
         answer = RagManager().get_answer(message)
         return Response(answer)
 
+    def get(self, request):
+        from cancer.analysis.gemini.llm import Gemini
+
+        gemini = Gemini()
+        prompt = """
+        Please provide a random genomic mutation associated with cancer, 
+        including the corresponding gene name and the specific type of cancer 
+        it is linked to. Additionally, include a brief description of both the 
+        mutation and the gene involved.
+        """
+        message = gemini.generate_answer(prompt)
+        return Response(message)
+
 
 router = DefaultRouter()
 router.register("breast", BreastCancerViewSet)
