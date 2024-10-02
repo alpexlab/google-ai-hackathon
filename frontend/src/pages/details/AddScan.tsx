@@ -18,7 +18,7 @@ const AddScan = () => {
       <div className='m-5 grid grid-cols-3 gap-6'>
         <div className='flex-1 ml-4'>
           <div>
-            <h1 className='w-[400px] mb-2'>Upload MRI Scan</h1>
+            <h1 className='w-[400px] mb-2'>Upload Scan</h1>
             <Tabs defaultValue='brain' className='w-[400px]'>
               <TabsList>
                 <TabsTrigger value='brain'>Brain</TabsTrigger>

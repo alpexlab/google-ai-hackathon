@@ -128,6 +128,11 @@ export const getSurvivalResponse = async (form: _SURVIVAL, patientId: string) =>
   return response.data;
 };
 
+export const getGenomeResponse = async () => {
+  const response: AxiosResponse<string> = await basicAxios(`/chat/`);
+  return response.data;
+};
+
 export const getNotificationCount = async () => {
   const response: AxiosResponse<number> = await basicAxios('/notifications/count/');
   return response.data;
