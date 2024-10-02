@@ -1,4 +1,4 @@
-import { Github } from 'lucide-react';
+import { Figma, FileText, Github, Mail, Youtube } from 'lucide-react';
 import FAQ from '../faq';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'; // Shadcn Tabs
 import { Link } from 'react-router-dom';
@@ -8,6 +8,7 @@ import abhyuday from '@/assets/abhyuday.png';
 import nikhil from '@/assets/nikhil.png';
 import ayush from '@/assets/ayush.png';
 import harshita from '@/assets/harshita.png';
+import logo from '@/assets/logo.png';
 
 const WelcomePage = () => {
   const [activeDoc, setActiveDoc] = useState<string>('api');
@@ -24,9 +25,11 @@ const WelcomePage = () => {
       {/* Main Content */}
       <main className='flex-grow flex flex-col items-center justify-center px-6 py-12'>
         <div className='text-center mb-12'>
-          <h1 className='text-5xl font-bold text-gray-800 mb-6'>Welcome to Canceralyze</h1>
-          <p className='text-xl text-gray-600 mb-8 max-w-2xl'>
-            Revolutionizing cancer detection with AI-powered solutions for early intervention.
+          <div className='flex justify-center'>
+            <img src={logo} className='h-[50px]' alt='Logo' />
+          </div>
+          <p className='text-xl text-gray-600 mb-8 max-w-2xl mt-2'>
+            Revolutionizing cancer detection with AI-powered solutions for early intervention
           </p>
           <Link
             className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out'
@@ -147,8 +150,42 @@ const WelcomePage = () => {
             className='flex items-center space-x-2 hover:text-blue-400 transition duration-300 ease-in-out'
           >
             <Github className='w-5 h-5' />
-            <span>Source</span>
           </a>
+          <a
+            href='https://www.figma.com/design/p9MgLVgDokTurSmn5pzVqv/Cancer-Detection'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='flex ml-3 items-center space-x-2 hover:text-blue-400 transition duration-300 ease-in-out'
+          >
+            <Figma className='w-5 h-5' />
+          </a>
+          <a
+            href='https://www.youtube.com/watch?v=w5ebcowAJD8'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='flex ml-3 items-center space-x-2 hover:text-blue-400 transition duration-300 ease-in-out'
+          >
+            <Youtube className='w-5 h-5' />
+          </a>
+          <a
+            href='mailto:nik.xyz.in@gmail.com'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='flex ml-3 items-center space-x-2 hover:text-blue-400 transition duration-300 ease-in-out'
+          >
+            <Mail className='w-5 h-5' />
+          </a>
+          <a
+            href='https://drive.google.com/drive/folders/1QJPUTBjGxobPexrzX4j2Hcp4kH4cyq9W?usp=sharing'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='flex ml-3 items-center space-x-2 hover:text-blue-400 transition duration-300 ease-in-out'
+          >
+            <FileText className='w-5 h-5' />
+          </a>
+        </div>
+        <div className='mt-4 text-center'>
+          <p>&copy; 2024 Canceralyze. All rights reserved.</p>
         </div>
       </footer>
     </div>

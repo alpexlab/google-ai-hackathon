@@ -26,13 +26,13 @@ const Navbar = () => {
     <nav className='bg-gray-800 p-2 px-6 flex justify-between items-center'>
       <div className='flex items-center'>
         <a href='/'>
-          <img src={logo} className='h-[50px]' alt='Canceralyze' />
+          <img src={logo} className='h-[23px]' alt='Canceralyze' />
         </a>
       </div>
       <div className='space-x-4 flex items-center'>
         <NotificationIcon count={count} />
         <button
-          className='bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded'
+          className='bg-red-400 hover:bg-red-500 text-white text-sm font-bold py-1 px-4 rounded'
           onClick={handleLogout}
         >
           Logout

@@ -4,8 +4,10 @@ const Brand = () => {
   return (
     <div>
       <a href='/' className='flex items-center justify-center flex-col'>
-        <img src={logo} className='h-[100px]' alt='Logo' />
-        <h1 className='text-xl font-bold text-blue-600'>Google AI Hackathon</h1>
+        <img src={logo} className='h-[50px]' alt='Logo' />
+        <span className='text-sm text-center text-gray-700 mt-2'>
+          Revolutionizing cancer detection
+        </span>
       </a>
     </div>
   );

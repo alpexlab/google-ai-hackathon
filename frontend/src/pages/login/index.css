@@ -1,0 +1,60 @@
+@keyframes floatCells {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(30px, -30px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.cell {
+  position: absolute;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.5;
+  animation: floatCells 8s ease-in-out infinite;
+}
+
+.cell:nth-child(1) {
+  width: 200px;
+  height: 200px;
+  left: 0; /* Position to the left */
+  top: 10%;
+  animation-duration: 12s;
+}
+
+.cell:nth-child(2) {
+  width: 180px;
+  height: 180px;
+  left: 10%; /* Slightly inward from the left */
+  bottom: 20%;
+  animation-duration: 15s;
+}
+
+.cell:nth-child(3) {
+  width: 220px;
+  height: 220px;
+  right: 10%; /* Position to the right */
+  top: 20%;
+  animation-duration: 18s;
+}
+
+.cell:nth-child(4) {
+  width: 160px;
+  height: 160px;
+  right: 0; /* Position to the right */
+  bottom: 10%;
+  animation-duration: 10s;
+}
+
+.cell:nth-child(5) {
+  width: 240px;
+  height: 240px;
+  left: 40%; /* Centered but still not overlapping the main content */
+  top: 60%;
+  animation-duration: 14s;
+}
