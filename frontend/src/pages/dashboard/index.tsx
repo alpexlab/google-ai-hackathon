@@ -11,7 +11,7 @@ import harshita from '@/assets/harshita.png';
 import logo from '@/assets/logo.png';
 
 const WelcomePage = () => {
-  const [activeDoc, setActiveDoc] = useState<string>('api');
+  const [activeDoc, setActiveDoc] = useState<string>('models');
 
   const teamMembers = [
     { name: 'Abhyuday Singh', imageUrl: abhyuday },
@@ -90,7 +90,7 @@ const WelcomePage = () => {
             {/* Docs Tab Content with Dropdown */}
             <TabsContent value='docs'>
               <div className='bg-white p-12 rounded-lg shadow-lg'>
-                <h2 className='text-3xl font-semibold mb-4'>Canceralyze Documentation</h2>
+                <h2 className='text-3xl font-semibold mb-4'>Documentation</h2>
                 <p className='text-gray-700 mb-4'>
                   Select a section from the dropdown to learn more about specific topics.
                 </p>
@@ -100,13 +100,12 @@ const WelcomePage = () => {
                   <select
                     value={activeDoc}
                     onChange={(e) => setActiveDoc(e.target.value)}
-                    className='w-full p-2 border border-gray-300 rounded-md'
+                    className='w-[300px] p-2 border border-gray-300 rounded-md'
                   >
-                    <option value='api'>API Integration Guide</option>
-                    <option value='model'>Model Training and Accuracy</option>
-                    <option value='security'>Data Security and Privacy</option>
-                    <option value='bestPractices'>Best Practices for Data Input</option>
-                    <option value='download_sample_images'>Download Sample Images</option>
+                    <option value='models'>Deep Learning Models</option>
+                    <option value='genai'>GenAI</option>
+                    <option value='frontend'>Frontend</option>
+                    <option value='backend'>Backend</option>
                   </select>
                 </div>
 
