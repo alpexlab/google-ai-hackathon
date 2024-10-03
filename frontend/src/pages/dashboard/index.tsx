@@ -53,7 +53,7 @@ const WelcomePage = () => {
             <iframe
               width='560'
               height='315'
-              src='https://www.youtube.com/embed/w5ebcowAJD8'
+              src='https://www.youtube.com/embed/1IOsEC0I_V8'
               title='Canceralyze Demo'
               allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
               allowFullScreen
@@ -160,7 +160,7 @@ const WelcomePage = () => {
             <Figma className='w-5 h-5' />
           </a>
           <a
-            href='https://www.youtube.com/watch?v=w5ebcowAJD8'
+            href='https://www.youtube.com/watch?v=1IOsEC0I_V8'
             target='_blank'
             rel='noopener noreferrer'
             className='flex ml-3 items-center space-x-2 hover:text-blue-400 transition duration-300 ease-in-out'
@@ -176,7 +176,7 @@ const WelcomePage = () => {
             <Mail className='w-5 h-5' />
           </a>
           <a
-            href='https://drive.google.com/drive/folders/1QJPUTBjGxobPexrzX4j2Hcp4kH4cyq9W?usp=sharing'
+            href='https://drive.google.com/drive/folders/146msuaPwvn0FJyjuxS03WKCSPSH5cn3F?usp=sharing'
             target='_blank'
             rel='noopener noreferrer'
             className='flex ml-3 items-center space-x-2 hover:text-blue-400 transition duration-300 ease-in-out'

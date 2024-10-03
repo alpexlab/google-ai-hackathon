@@ -24,8 +24,7 @@ This repository contains implementations for cancer detection using deep learnin
 3. Prepare your dataset of images for lung and brain cancer.
 4. Train the respective models for prediction and segmentation tasks.
 5. Use the trained models to make predictions on new data.
-
-
+6. Trained ML Models can be found [here](https://drive.google.com/drive/folders/146msuaPwvn0FJyjuxS03WKCSPSH5cn3F?usp=sharing)
 
 ## Contributing
 
