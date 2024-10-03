@@ -36,7 +36,7 @@ const FAQ = () => {
     {
       question: 'What technologies are used in this application?',
       answer:
-        'The application uses advanced GenAI models, secure APIs, and cloud infrastructure to process MRI scans and provide personalized treatment recommendations.',
+        'The tech stack include Gemini API, TensorFlow, OpenCV, Matplotlib, React, Django, and Docker',
     },
     {
       question: 'How accurate are the predictions?',

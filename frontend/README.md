@@ -1,7 +1,8 @@
-# Alpex Lab
+# Frontend
 
 - `Node.js ~= v20.0.0`
 - `npm ~= v10.0.0`
+- Tech Stack: `React`, `TypeScript`, `TailwindCSS`, `Shadcn`
 
 ## Setup
 
@@ -10,8 +11,9 @@ Requirements:
 - Docker
 - Make
 
-1. Clone the repository
-2. `cp .env.sample .env`
-3. Run `make` to install all dependencies and start the development server at `http://localhost:5173`
+### Steps
 
-Explore `Makefile` to see all available commands
+1. Clone the repository using `git clone https://github.com/alpexlab/google-ai-hackathon.git`
+2. Navigate to the frontend directory using `cd frontend`
+3. `cp .env.sample .env`
+4. Run `make` to install all dependencies and start the development server at `http://localhost:5173`
