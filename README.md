@@ -55,9 +55,9 @@ password: guest123
 
 ### Instructions
 
-- [Frontend](/frontend/README.md)
-- [Backend](/backend/README.md)
-- [ML Models](/ml-models/README.md)
+- [Frontend](frontend/README.md)
+- [Backend](backend/README.md)
+- [ML Models](ml-models/README.md)
 
 ### Team Members
 
