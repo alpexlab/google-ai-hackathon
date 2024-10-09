@@ -316,13 +316,58 @@ class ChatAPIView(APIView):
 
     def get(self, request):
         from cancer.analysis.gemini.llm import Gemini
+        # Please provide a random genomic mutation associated with cancer, 
+        # including the corresponding gene name and the specific type of cancer 
+        # it is linked to. Additionally, include a brief description of both the 
+        # mutation and the gene involved.
 
         gemini = Gemini()
         prompt = """
-        Please provide a random genomic mutation associated with cancer, 
-        including the corresponding gene name and the specific type of cancer 
-        it is linked to. Additionally, include a brief description of both the 
-        mutation and the gene involved.
+        You are given a VCF (Variant Call Format) file containing genomic data. Please summarize the following details from the file:
+
+        Position (chromosomal location)
+        Type of mutation (SNP, InDel, etc.)
+        Reference and alternative alleles
+        Quality scores of variants
+        Genotype information for each sample
+
+        Here's the VCF file data:
+
+
+        ##fileformat=VCFv4.2
+        ##fileDate=20241009
+        ##source=SampleImputationProgramV4.0
+        ##reference=file:///seq/references/hg38.fasta
+        ##contig=<ID=22,length=50818468,assembly=GRCh38,md5=d58f8fdb5f8d9b77f1b4b4e6d4dbd5a6,species="Homo sapiens",taxonomy=9606>
+        ##phasing=partial
+        ##INFO=<ID=NS,Number=1,Type=Integer,Description="Number of Samples With Data">
+        ##INFO=<ID=DP,Number=1,Type=Integer,Description="Total Depth">
+        ##INFO=<ID=AF,Number=A,Type=Float,Description="Allele Frequency">
+        ##INFO=<ID=AA,Number=1,Type=String,Description="Ancestral Allele">
+        ##INFO=<ID=DB,Number=0,Type=Flag,Description="dbSNP membership, build 153">
+        ##INFO=<ID=H2,Number=0,Type=Flag,Description="HapMap2 membership">
+        ##FILTER=<ID=q20,Description="Quality below 20">
+        ##FILTER=<ID=s50,Description="Less than 50% of samples have data">
+        ##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+        ##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
+        ##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Read Depth">
+        ##FORMAT=<ID=HQ,Number=2,Type=Integer,Description="Haplotype Quality">
+        #CHROM POS ID REF ALT QUAL FILTER INFO FORMAT Sample1 Sample2 Sample3
+        22 1605123 rs1234567 G A 35 PASS NS=3;DP=20;AF=0.5;DB;H2 GT:GQ:DP:HQ 0|0:45:2:50,52 1|0:50:12:55,57 1/1:38:8:.,.
+        22 1623456 . T C 5 q20 NS=3;DP=9;AF=0.05 GT:GQ:DP:HQ 0|0:50:4:60,55 0|1:4:6:60,4 0/0:42:3
+        22 1644321 rs9876543 C T,G 70 PASS NS=2;DP=15;AF=0.25,0.75;AA=G;DB GT:GQ:DP:HQ 1|2:30:7:35,40 2|1:5:0:30,5 2/2:45:5
+        22 1722345 . C . 55 PASS NS=3;DP=17;AA=C GT:GQ:DP:HQ 0|0:60:10:65,70 0|0:52:7:60,60 0/0:67:3
+        22 1809876 microsat2 ACT A,ACTC 60 PASS NS=3;DP=12;AA=A GT:GQ:DP 0/1:40:5 0/2:22:3 1/1:50:4
+
+        Please summarize this data in Markdown format as a table, with the following columns:
+
+        Position (POS)
+        Type of Mutation (SNP, InDel, etc.)
+        Reference Allele (REF)
+        Alternative Alleles (ALT)
+        Quality (QUAL)
+        Genotype (GT for each sample)
+
         """
         message = gemini.generate_answer(prompt)
         return Response(message)
