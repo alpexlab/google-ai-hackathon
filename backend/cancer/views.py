@@ -190,6 +190,7 @@ class BreastCancerViewSet(ModelViewSet):
             "cancer": BreastCancerSerializer(cancer).data,
             "report": {
                 **BreastCancerReportSerializer(report).data,
+                "classes": ["Benign", "Malignant"],
             },
         }
 
@@ -316,9 +317,10 @@ class ChatAPIView(APIView):
 
     def get(self, request):
         from cancer.analysis.gemini.llm import Gemini
-        # Please provide a random genomic mutation associated with cancer, 
-        # including the corresponding gene name and the specific type of cancer 
-        # it is linked to. Additionally, include a brief description of both the 
+
+        # Please provide a random genomic mutation associated with cancer,
+        # including the corresponding gene name and the specific type of cancer
+        # it is linked to. Additionally, include a brief description of both the
         # mutation and the gene involved.
 
         gemini = Gemini()

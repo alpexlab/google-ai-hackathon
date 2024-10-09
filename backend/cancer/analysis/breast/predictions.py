@@ -1,35 +1,41 @@
 import numpy as np
-from PIL import Image
 import os
+from tensorflow.keras.preprocessing import image
+import tensorflow as tf
 
 from django.conf import settings
-from cancer.models import BreastCancerReport, Notifications
 
-from cancer.analysis.breast.segmentation import BreastSegmentation
+from cancer.models import BreastCancerReport, Notifications
+from cancer.analysis.segmentation.mask import Segmentation
 
 
 class BreastAnalysis:
     def __init__(self, *args, **kwargs) -> None:
-        self.model_path = f"{settings.BASE_DIR}/models/breast"
+        self.model_path = f"{settings.BASE_DIR}/models/breast_prediction"
 
         self.load_model()
         self.analyze(*args, **kwargs)
 
     def load_model(self):
-        from keras.layers import TFSMLayer
-
-        self.model = TFSMLayer(self.model_path, call_endpoint="serving_default")
+        model = tf.saved_model.load(self.model_path)
+        self.model = model.signatures["serving_default"]
 
     def analyze(self, image_path: str, report_id: str, doctor: str):
-        prediction, pred_value = self.predict(image_path)
-        result_image_path, stats_image_path = self.save_plots(
-            image_path, prediction, pred_value
+        label, pred_value, benign_prob, malignant_prob, original_img = (
+            self.predict_image(image_path)
         )
-        BreastSegmentation(image_path, report_id)
+        result_image_path = self.save_plots(
+            original_img, label, pred_value, benign_prob, malignant_prob
+        )
 
         report = BreastCancerReport.objects.get(id=report_id)
+        report.max_prob = pred_value
+        report.predicted_label = label
+        report.probs = [benign_prob, malignant_prob]
         report.result_image = "/media/" + result_image_path.split("media/")[-1]
-        report.stats_image = "/media/" + stats_image_path.split("media/")[-1]
+
+        segmented_image_path = Segmentation(image_path).segmented_image_path
+        report.segmented_image = "/media/" + segmented_image_path.split("media/")[-1]
 
         report.status = BreastCancerReport.Status.COMPLETE
         report.save()
@@ -39,26 +45,31 @@ class BreastAnalysis:
             message=f"Breast cancer analysis for {report.cancer.patient.name} (Registration No: {report.cancer.patient.id}) is completed. The report suggests {'predicted_label'} with a probability of {'max_prob:.2f'}. Please check the report for more details",
         )
 
-    def predict(self, image_path: str):
-        import cv2
+    def preprocess_image(self, image_path, target_size=(200, 200)):
+        img = image.load_img(image_path, target_size=target_size)
+        img_array = image.img_to_array(img)
+        img_array = np.expand_dims(img_array, axis=0)
+        img_array = img_array / 255.0
+        return img_array, img
 
-        img = cv2.imread(image_path)
-        img = cv2.resize(img, (128, 128))
-        img = np.array(img) / 255.0
+    def predict_image(self, image_path):
+        # Preprocess the image
+        img, original_img = self.preprocess_image(image_path)
 
-        img = np.expand_dims(img, axis=0)
-        pred = self.model(img)
+        img_tensor = tf.convert_to_tensor(img, dtype=tf.float32)
+        prediction = self.model(img_tensor)
 
-        pred_value = pred["dense_2"].numpy()[0][0]
+        prob = prediction["output_0"].numpy()[0]
 
-        if pred_value > 0.5:
-            prediction = "Malignant (Cancer)"
-        else:
-            prediction = "Benign (No Cancer)"
+        label = "Malignant" if prob > 0.5 else "Benign"
+        probability = float(prob) if prob > 0.5 else float(1 - prob)
 
-        return prediction, pred_value
+        benign_prob = 1 - probability
+        malignant_prob = probability
 
-    def save_plots(self, image_path: str, prediction: str, pred_value: float):
+        return label, probability, benign_prob, malignant_prob, original_img
+
+    def save_plots(self, original_img, label, probability, benign_prob, malignant_prob):
         import matplotlib
 
         matplotlib.use("Agg")
@@ -69,28 +80,25 @@ class BreastAnalysis:
             f"{settings.BASE_DIR}/media/reports/breast/{uuid.uuid4()}.jpg"
         )
         os.makedirs(os.path.dirname(result_image_path), exist_ok=True)
-        stats_image_path = (
-            f"{settings.BASE_DIR}/media/reports/breast/{uuid.uuid4()}.jpg"
-        )
-        os.makedirs(os.path.dirname(stats_image_path), exist_ok=True)
 
-        original_img = Image.open(image_path)
-        plt.imshow(original_img)
-        plt.title(f"Predicted: {prediction} with probability: {pred_value:.2f}")
+        _, ax = plt.subplots(1, 2, figsize=(10, 5))
+
+        original_img_array = image.img_to_array(original_img)
+        ax[0].imshow(original_img_array.astype("uint8"))
+        ax[0].axis("off")
+        ax[0].set_title(f"{label} (Probability: {probability:.2f})")
+
+        ax[1].bar(
+            ["Benign", "Malignant"],
+            [benign_prob, malignant_prob],
+            color=["blue", "red"],
+        )
+        ax[1].set_ylim(0, 1)
+        ax[1].set_ylabel("Probability")
+        ax[1].set_title("Class Probability Histogram")
+
+        plt.tight_layout()
         plt.savefig(result_image_path)
         plt.close()
 
-        # Now save an image of histogram for the 2 classes
-        plt.bar(["Benign", "Malignant"], [1 - pred_value, pred_value])
-        plt.ylabel("Probability")
-        plt.title("Prediction")
-        plt.savefig(stats_image_path)
-        plt.show()
-        plt.close()
-
-        plt.imshow(cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB))
-        plt.title(prediction)
-        plt.axis("off")
-        plt.show()
-
-        return result_image_path, stats_image_path
+        return result_image_path

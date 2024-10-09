@@ -91,6 +91,9 @@ class BreastCancerReport(Report):
         BreastCancer, on_delete=models.CASCADE, related_name="report"
     )
     result_image = models.URLField(null=True)
+    predicted_label = models.CharField(max_length=200, null=True)
+    max_prob = models.FloatField(null=True)
+    probs = models.JSONField(null=True)
     stats_image = models.URLField(null=True)
     segmented_image = models.URLField(null=True)
 

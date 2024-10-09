@@ -63,6 +63,7 @@ export type _BREAST_REPORT = {
   cancer: _BREAST_CANCER;
   report: {
     result_image: string;
+    segmented_image: string;
     stats_image: string;
     probs: number[];
     predicted_label: string;
