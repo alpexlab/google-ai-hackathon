@@ -3,6 +3,7 @@ import { BrainCard } from '@/components/details/brain_card';
 import { BreastCard } from '@/components/details/breast_card';
 import { GenomeCard } from '@/components/details/genome_card';
 import { LungCard } from '@/components/details/lung_card';
+import { SkinCard } from '@/components/details/skin_card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { _PATIENT } from '@/types';
 import { useSearchParams } from 'react-router-dom';
@@ -23,6 +24,7 @@ const AddScan = () => {
                 <TabsTrigger value='brain'>Brain</TabsTrigger>
                 <TabsTrigger value='breast'>Breast</TabsTrigger>
                 <TabsTrigger value='lungs'>Lungs</TabsTrigger>
+                <TabsTrigger value='skin'>Skin</TabsTrigger>
                 <TabsTrigger value='genome'>Genome</TabsTrigger>
               </TabsList>
               <TabsContent value='brain'>
@@ -33,6 +35,9 @@ const AddScan = () => {
               </TabsContent>
               <TabsContent value='lungs'>
                 <LungCard patientId={patientId} />
+              </TabsContent>
+              <TabsContent value='skin'>
+                <SkinCard patientId={patientId} />
               </TabsContent>
               <TabsContent value='genome'>
                 <GenomeCard patientId={patientId} />

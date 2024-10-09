@@ -63,7 +63,7 @@ class LungCancer(Cancer):
 
 
 class SkinCancer(Cancer):
-    pass
+    mri = models.ImageField(upload_to="cancer/skin", blank=True, null=True)
 
 
 class BrainCancer(Cancer):
@@ -119,6 +119,11 @@ class SkinCancerReport(Report):
     cancer = models.OneToOneField(
         SkinCancer, on_delete=models.CASCADE, related_name="report"
     )
+    result_image = models.URLField(null=True)
+    predicted_label = models.CharField(max_length=200, null=True)
+    max_prob = models.FloatField(null=True)
+    probs = models.JSONField(null=True)
+    segmented_image = models.URLField(null=True)
 
 
 class BrainCancerReport(Report):

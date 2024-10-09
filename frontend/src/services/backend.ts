@@ -10,6 +10,7 @@ import {
   _LUNG_REPORT,
   _PATIENT,
   _SCAN,
+  _SKIN_CANCER,
   _SURVIVAL,
 } from '@/types';
 import { basicAxios } from './basicAxios';
@@ -86,6 +87,21 @@ export const createLungCancer = async (formData: _LUNG_CANCER) => {
   return response.data;
 };
 
+export const createSkinCancer = async (formData: _SKIN_CANCER) => {
+  const options = {
+    method: 'POST',
+    withCredentials: true,
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Authorization': `Bearer ${getAccessToken()}`,
+    },
+  };
+
+  const response: AxiosResponse<_SKIN_CANCER> = await basicAxios('/skin/', options);
+  return response.data;
+};
+
 export const createGenome = async (formData: _GENOME) => {
   const options = {
     method: 'POST',
@@ -113,6 +129,11 @@ export const getBrainReport = async (id: string) => {
 
 export const getBreastReport = async (id: string) => {
   const response: AxiosResponse<_BREAST_REPORT> = await basicAxios(`/breast/${id}/report/`);
+  return response.data;
+};
+
+export const getSkinReport = async (id: string) => {
+  const response: AxiosResponse<_BREAST_REPORT> = await basicAxios(`/skin/${id}/report/`);
   return response.data;
 };
 

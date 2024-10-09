@@ -67,7 +67,7 @@ const Details = () => {
               to={`/add-scan?patient=${patientId}`}
               className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
             >
-              Add Scan
+              Detect
             </Link>
             <SurvivalCalculator patientId={patientId} />
           </div>

@@ -15,6 +15,7 @@ import BlogEditor from '@/pages/blogs';
 import Blog from '@/pages/blogs/Blog';
 import BlogRead from '@/pages/blogs/BlogRead';
 import Genome from '@/pages/report/Genome';
+import Skin from '@/pages/report/Skin';
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path: '/genome/:id',
         element: <Genome />,
+      },
+      {
+        path: '/skin/:id',
+        element: <Skin />,
       },
       {
         path: '/chat',

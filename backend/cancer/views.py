@@ -44,6 +44,7 @@ from rest_framework.decorators import action
 from cancer.analysis.breast.predictions import BreastAnalysis
 from cancer.analysis.brain.predictions import BrainAnalysis
 from cancer.analysis.lungs.predictions import LungsAnalysis
+from cancer.analysis.skin.predictions import SkinAnalysis
 
 
 class PatientViewSet(ModelViewSet):
@@ -255,6 +256,48 @@ class LungCancerViewSet(ModelViewSet):
 class SkinCancerViewSet(ModelViewSet):
     queryset = SkinCancer.objects.all()
     serializer_class = SkinCancerSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        cancer = serializer.instance
+
+        image_path = f"{settings.BASE_DIR}{cancer.mri.url}"
+        report_serializer = SkinCancerReportSerializer(data={"cancer": cancer.id})
+        report_serializer.is_valid(raise_exception=True)
+        report_serializer.save()
+        report = report_serializer.instance
+
+        threading.Thread(
+            target=SkinAnalysis, args=(image_path, report.id, request.doctor)
+        ).start()
+
+        return Response(serializer.data)
+
+    @action(detail=True, methods=["get"])
+    def report(self, request, pk=None):
+        cancer = get_object_or_404(SkinCancer, pk=pk)
+        report = cancer.report
+        data = {
+            "cancer": SkinCancerSerializer(cancer).data,
+            "report": {
+                **SkinCancerReportSerializer(report).data,
+                "classes": [
+                    "actinic keratosis",
+                    "basal cell carcinoma",
+                    "dermatofibroma",
+                    "melanoma",
+                    "nevus",
+                    "pigmented benign keratosis",
+                    "seborrheic keratosis",
+                    "squamous cell carcinoma",
+                    "vascular lesion",
+                ],
+            },
+        }
+
+        return Response(data)
 
 
 class BrainCancerViewSet(ModelViewSet):

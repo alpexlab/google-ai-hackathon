@@ -42,6 +42,13 @@ export type _BRAIN_CANCER = {
   id?: string;
 };
 
+export type _SKIN_CANCER = {
+  patient: string;
+  mri: File | null | string;
+  comments: string;
+  id?: string;
+};
+
 export type _GENOME = {
   patient: string;
   vcf: File | null | string;
@@ -67,6 +74,19 @@ export type _BRAIN_REPORT = {
   report: {
     result_image: string;
     stats_image: string;
+    segmented_image: string;
+    probs: number[];
+    predicted_label: string;
+    max_prob: string;
+    classes: string[];
+    status: string;
+  };
+};
+
+export type _SKIN_REPORT = {
+  cancer: _SKIN_CANCER;
+  report: {
+    result_image: string;
     segmented_image: string;
     probs: number[];
     predicted_label: string;
