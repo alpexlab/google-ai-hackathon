@@ -3,6 +3,7 @@ import {
   _BRAIN_REPORT,
   _BREAST_CANCER,
   _BREAST_REPORT,
+  _CASE_STUDY,
   _LUNG_CANCER,
   _LUNG_REPORT,
   _PATIENT,
@@ -155,4 +156,29 @@ export const deleteNotification = async (id: string) => {
   };
 
   await basicAxios(`/notifications/${id}/`, options);
+};
+
+export const createCaseStudy = async (data: _CASE_STUDY) => {
+  const options = {
+    method: 'POST',
+    withCredentials: true,
+    data,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getAccessToken()}`,
+    },
+  };
+
+  const response: AxiosResponse<_CASE_STUDY> = await basicAxios('/case-studies/', options);
+  return response.data;
+};
+
+export const getCaseStudies = async () => {
+  const response: AxiosResponse<_CASE_STUDY[]> = await basicAxios('/case-studies/');
+  return response.data;
+};
+
+export const getCaseStudy = async (id: string) => {
+  const response: AxiosResponse<_CASE_STUDY> = await basicAxios(`/case-studies/${id}/`);
+  return response.data;
 };

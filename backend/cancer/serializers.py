@@ -9,6 +9,7 @@ from cancer.models import (
     BrainCancerReport,
     Patient,
     Notifications,
+    CaseStudy,
 )
 
 from rest_framework import serializers
@@ -79,4 +80,10 @@ class BrainCancerReportSerializer(serializers.ModelSerializer):
 class NotificationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notifications
+        fields = "__all__"
+
+
+class CaseStudySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CaseStudy
         fields = "__all__"

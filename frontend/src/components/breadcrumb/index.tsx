@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Link } from 'react-router-dom';
 
-const EasyNav = ({ patient, report }: { patient: string; report?: string }) => {
+const EasyNav = ({ patient, report }: { patient?: string; report?: string }) => {
   return (
     <div className='m-3'>
       <Breadcrumb>
@@ -14,10 +14,14 @@ const EasyNav = ({ patient, report }: { patient: string; report?: string }) => {
           <BreadcrumbItem>
             <Link to='/u'>Home</Link>
           </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <Link to={`/details/?patient=${patient}`}>Details</Link>
-          </BreadcrumbItem>
+          {patient && (
+            <>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <Link to={`/details/?patient=${patient}`}>Details</Link>
+              </BreadcrumbItem>
+            </>
+          )}
           {report && (
             <>
               <BreadcrumbSeparator />

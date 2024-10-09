@@ -128,3 +128,12 @@ class BrainCancerReport(Report):
 class Notifications(models.Model):
     doctor = models.EmailField()
     message = models.CharField(max_length=200, null=True)
+
+
+class CaseStudy(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    author = models.EmailField()
+
+    class Meta:
+        verbose_name_plural = "Case Studies"

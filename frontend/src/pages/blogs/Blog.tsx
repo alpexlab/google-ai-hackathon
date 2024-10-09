@@ -1,25 +1,21 @@
 import Sidebar from '@/components/ui/sidebar';
 import { Link } from 'react-router-dom';
 import { User, ArrowRight } from 'lucide-react'; // Import the necessary Lucide icons
-
-const blogs = [
-  {
-    id: 1,
-    title: 'Understanding Cancer Treatment',
-    author: 'Dr. Jane Smith',
-    description: 'An overview of the latest treatments in cancer care and their efficacy...',
-  },
-  {
-    id: 2,
-    title: 'The Importance of Early Detection',
-    author: 'Dr. John Doe',
-    description:
-      'Early detection of cancer can significantly improve treatment outcomes. Here’s why...',
-  },
-  // Add more blog entries as needed
-];
+import { useEffect, useState } from 'react';
+import { _CASE_STUDY } from '@/types';
+import { getCaseStudies } from '@/services/backend';
 
 const Blog = () => {
+  const [caseStudies, setCaseStudies] = useState<_CASE_STUDY[]>([]);
+
+  useEffect(() => {
+    async function fetchCase() {
+      const res = await getCaseStudies();
+      setCaseStudies(res);
+    }
+    fetchCase();
+  }, []);
+
   return (
     <div className='flex h-screen bg-gray-50'>
       <Sidebar />
@@ -29,7 +25,7 @@ const Blog = () => {
           Add New Blog
         </Link>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6'>
-          {blogs.map((blog) => (
+          {caseStudies.map((blog) => (
             <div
               key={blog.id}
               className='bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-200 hover:shadow-xl hover:scale-105'

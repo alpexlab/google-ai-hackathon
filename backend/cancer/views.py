@@ -7,6 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from django.db.models.query import QuerySet
 
 from cancer.models import (
     BreastCancer,
@@ -19,6 +20,7 @@ from cancer.models import (
     BrainCancerReport,
     Patient,
     Notifications,
+    CaseStudy,
 )
 from cancer.serializers import (
     BreastCancerSerializer,
@@ -30,6 +32,7 @@ from cancer.serializers import (
     SkinCancerReportSerializer,
     BrainCancerReportSerializer,
     PatientSerializer,
+    CaseStudySerializer,
     NotificationsSerializer,
 )
 from rest_framework.parsers import MultiPartParser, JSONParser
@@ -325,6 +328,31 @@ class ChatAPIView(APIView):
         return Response(message)
 
 
+class CaseStudyViewSet(ModelViewSet):
+    queryset = CaseStudy.objects.all()
+    serializer_class = CaseStudySerializer
+
+    def create(self, request, *args, **kwargs):
+        request.data["author"] = request.doctor
+        return super().create(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        queryset = CaseStudy.objects.all()
+        new_queryset = []
+        for case in queryset:
+            new_queryset.append(
+                {
+                    "id": case.id,
+                    "title": case.title,
+                    "description": f"{case.description[:100]}...",
+                    "author": case.author,
+                }
+            )
+
+        serializers = CaseStudySerializer(new_queryset, many=True)
+        return Response(serializers.data)
+
+
 router = DefaultRouter()
 router.register("breast", BreastCancerViewSet)
 router.register("lungs", LungCancerViewSet)
@@ -336,3 +364,4 @@ router.register("skin-report", SkinCancerReportViewSet)
 router.register("brain-report", BrainCancerReportViewSet)
 router.register("patients", PatientViewSet, basename="patient")
 router.register("notifications", NotificationsViewSet, basename="notifications")
+router.register("case-studies", CaseStudyViewSet, basename="case-studies")

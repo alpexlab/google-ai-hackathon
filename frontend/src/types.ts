@@ -85,3 +85,10 @@ export type _LUNG_REPORT = {
     status: string;
   };
 };
+
+export type _CASE_STUDY = {
+  id?: string;
+  title: string;
+  description: string;
+  author?: string;
+};
