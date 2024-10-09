@@ -7,10 +7,11 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from django.db.models.query import QuerySet
 
 from cancer.models import (
     BreastCancer,
+    Genome,
+    GenomeReport,
     LungCancer,
     SkinCancer,
     BrainCancer,
@@ -24,6 +25,8 @@ from cancer.models import (
 )
 from cancer.serializers import (
     BreastCancerSerializer,
+    GenomeReportSerializer,
+    GenomeSerializer,
     LungCancerSerializer,
     SkinCancerSerializer,
     BrainCancerSerializer,
@@ -63,11 +66,13 @@ class PatientViewSet(ModelViewSet):
         lung_cancer = LungCancer.objects.filter(patient=patient)
         brain_cancer = BrainCancer.objects.filter(patient=patient)
         skin_cancer = SkinCancer.objects.filter(patient=patient)
+        genome = Genome.objects.filter(patient=patient)
 
         breast_cancer_serializer = BreastCancerSerializer(breast_cancer, many=True)
         lung_cancer_serializer = LungCancerSerializer(lung_cancer, many=True)
         brain_cancer_serializer = BrainCancerSerializer(brain_cancer, many=True)
         skin_cancer_serializer = SkinCancerSerializer(skin_cancer, many=True)
+        genome_serializer = GenomeSerializer(genome, many=True)
 
         data = []
         iso_format = "%Y-%m-%dT%H:%M:%S.%fZ"
@@ -121,6 +126,19 @@ class PatientViewSet(ModelViewSet):
                     **scan,
                 }
                 for scan in skin_cancer_serializer.data
+            ]
+        )
+
+        data.extend(
+            [
+                {
+                    "type": "genome",
+                    "timestamp": datetime.strptime(
+                        scan["created_at"], iso_format
+                    ).strftime("%Y-%m-%d %H:%M:%S"),
+                    **scan,
+                }
+                for scan in genome_serializer.data
             ]
         )
 
@@ -307,21 +325,12 @@ class NotificationsViewSet(ModelViewSet):
         return Response(count)
 
 
-class ChatAPIView(APIView):
-    def post(self, request):
-        message = request.data.get("message")
-        from cancer.analysis.gemini.chat import RagManager
+class GenomeViewSet(ModelViewSet):
+    queryset = Genome.objects.all()
+    serializer_class = GenomeSerializer
 
-        answer = RagManager().get_answer(message)
-        return Response(answer)
-
-    def get(self, request):
+    def generate_response(self, vcf_url, report_id, doctor):
         from cancer.analysis.gemini.llm import Gemini
-
-        # Please provide a random genomic mutation associated with cancer,
-        # including the corresponding gene name and the specific type of cancer
-        # it is linked to. Additionally, include a brief description of both the
-        # mutation and the gene involved.
 
         gemini = Gemini()
         prompt = """
@@ -372,7 +381,50 @@ class ChatAPIView(APIView):
 
         """
         message = gemini.generate_answer(prompt)
-        return Response(message)
+        report = GenomeReport.objects.get(id=report_id)
+        report.output = message
+        report.status = GenomeReport.Status.COMPLETE
+        report.save()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        cancer = serializer.instance
+        vcf_url = f"{settings.BASE_DIR}{cancer.vcf.url}"
+
+        report_serializer = GenomeReportSerializer(data={"cancer": cancer.id})
+        report_serializer.is_valid(raise_exception=True)
+        report_serializer.save()
+        report = report_serializer.instance
+
+        threading.Thread(
+            target=self.generate_response, args=(vcf_url, report.id, request.doctor)
+        ).start()
+
+        return Response(serializer.data)
+
+    @action(detail=True, methods=["get"])
+    def report(self, request, pk=None):
+        cancer = get_object_or_404(Genome, pk=pk)
+        report = cancer.report
+        data = {
+            "cancer": GenomeSerializer(cancer).data,
+            "report": {
+                **GenomeReportSerializer(report).data,
+            },
+        }
+
+        return Response(data)
+
+
+class ChatAPIView(APIView):
+    def post(self, request):
+        message = request.data.get("message")
+        from cancer.analysis.gemini.chat import RagManager
+
+        answer = RagManager().get_answer(message)
+        return Response(answer)
 
 
 class CaseStudyViewSet(ModelViewSet):
@@ -405,6 +457,7 @@ router.register("breast", BreastCancerViewSet)
 router.register("lungs", LungCancerViewSet)
 router.register("skin", SkinCancerViewSet)
 router.register("brain", BrainCancerViewSet)
+router.register("genome", GenomeViewSet)
 router.register("breast-report", BreastCancerReportViewSet)
 router.register("lung-report", LungCancerReportViewSet)
 router.register("skin-report", SkinCancerReportViewSet)

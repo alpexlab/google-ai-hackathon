@@ -66,7 +66,7 @@ const Lungs = () => {
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
               {/* MRI Image Section */}
               <div className='text-center'>
-                <h3 className='text-xl font-semibold'>MRI Scan</h3>
+                <h3 className='text-xl font-semibold'>CT Scan</h3>
                 <img
                   src={report?.cancer.mri as string}
                   alt='MRI scan'

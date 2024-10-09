@@ -11,10 +11,10 @@ import Lungs from '@/pages/report/Lungs';
 import Chat from '@/pages/chat';
 import Notifications from '@/pages/notifications';
 import WelcomePage from '@/pages/dashboard';
-import GenomePage from '@/pages/genome';
 import BlogEditor from '@/pages/blogs';
 import Blog from '@/pages/blogs/Blog';
 import BlogRead from '@/pages/blogs/BlogRead';
+import Genome from '@/pages/report/Genome';
 
 const router = createBrowserRouter([
   {
@@ -54,16 +54,16 @@ const router = createBrowserRouter([
         element: <Lungs />,
       },
       {
+        path: '/genome/:id',
+        element: <Genome />,
+      },
+      {
         path: '/chat',
         element: <Chat />,
       },
       {
         path: '/notifications',
         element: <Notifications />,
-      },
-      {
-        path: '/genome',
-        element: <GenomePage />,
       },
       {
         path: '/editor',

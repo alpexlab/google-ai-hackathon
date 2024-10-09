@@ -13,6 +13,14 @@ export type _PATIENT = {
   summary?: string;
 };
 
+export type _GENOME_REPORT = {
+  cancer: _GENOME;
+  report: {
+    output: string;
+    status: string;
+  };
+};
+
 export type _SURVIVAL = {
   tstage: string;
   nstage: string;
@@ -30,6 +38,13 @@ export type _SCAN = {
 export type _BRAIN_CANCER = {
   patient: string;
   mri: File | null | string;
+  comments: string;
+  id?: string;
+};
+
+export type _GENOME = {
+  patient: string;
+  vcf: File | null | string;
   id?: string;
 };
 
@@ -37,12 +52,14 @@ export type _BREAST_CANCER = {
   patient: string;
   mri: File | null | string;
   id?: string;
+  comments: string;
 };
 
 export type _LUNG_CANCER = {
   patient: string;
   mri: File | null | string;
   id?: string;
+  comments: string;
 };
 
 export type _BRAIN_REPORT = {

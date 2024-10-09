@@ -42,7 +42,7 @@ class BreastAnalysis:
 
         Notifications.objects.create(
             doctor=doctor,
-            message=f"Breast cancer analysis for {report.cancer.patient.name} (Registration No: {report.cancer.patient.id}) is completed. The report suggests {'predicted_label'} with a probability of {'max_prob:.2f'}. Please check the report for more details",
+            message=f"Breast cancer analysis for {report.cancer.patient.name} (Registration No: {report.cancer.patient.id}) is completed. The report suggests {label} with a probability of {pred_value:.2f}. Please check the report for more details",
         )
 
     def preprocess_image(self, image_path, target_size=(200, 200)):

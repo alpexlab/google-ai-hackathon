@@ -25,7 +25,13 @@ const secondaryVariant = {
   },
 };
 
-export const FileUpload = ({ onChange }: { onChange?: (files: File[]) => void }) => {
+export const FileUpload = ({
+  onChange,
+  btn_name,
+}: {
+  onChange?: (files: File[]) => void;
+  btn_name?: string;
+}) => {
   const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -66,7 +72,7 @@ export const FileUpload = ({ onChange }: { onChange?: (files: File[]) => void })
         </div>
         <div className='flex flex-col items-center justify-center'>
           <p className='relative z-20 font-sans font-bold text-neutral-700 dark:text-neutral-300 text-base'>
-            Upload file
+            {btn_name ? btn_name : 'Upload file'}
           </p>
           <p className='relative z-20 font-sans font-normal text-neutral-400 dark:text-neutral-400 text-base mt-2'>
             Drag or drop your files here or click to upload

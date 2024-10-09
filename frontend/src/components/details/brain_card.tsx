@@ -4,11 +4,14 @@ import { useState } from 'react';
 import { Button } from '../ui/button';
 import { createBrainCancer } from '@/services/backend';
 import { useToast } from '@/hooks/use-toast';
+import { Label } from '../ui/label';
+import { Textarea } from '../ui/textarea';
 
 export const BrainCard = ({ patientId }: { patientId: string }) => {
   const [cancer, setCancer] = useState<_BRAIN_CANCER>({
     patient: patientId,
     mri: null,
+    comments: '',
   });
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -34,20 +37,28 @@ export const BrainCard = ({ patientId }: { patientId: string }) => {
     }
   };
   return (
-    <div className='mx-auto'>
+    <div className='mx-auto flex items-center'>
       {/* <div className='m-5 font-bold'>Upload MRI Scans of the Brain</div> */}
-      <div>
+      <div className='h-fit'>
         <div className='w-full max-w-4xl mx-auto min-h-48 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg'>
           <FileUpload
             onChange={(files: File[]) => {
               const mri = files[0];
               setCancer({ ...cancer, mri });
             }}
+            btn_name='Upload MRI Scan'
           />
         </div>
         <Button onClick={handleSubmit} disabled={loading} className='mt-5'>
           {loading ? 'Loading...' : 'Submit'}
         </Button>
+      </div>
+      <div className='w-[300px] ml-4 h-fit'>
+        <Label htmlFor='width'>Medical Comments</Label>
+        <Textarea
+          className='col-span-2 mt-3 h-[150px]'
+          onChange={(e) => setCancer({ ...cancer, comments: e.target.value })}
+        />
       </div>
     </div>
   );

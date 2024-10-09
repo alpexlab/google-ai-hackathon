@@ -43,6 +43,7 @@ class Patient(models.Model):
 class Cancer(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
+    comments = models.TextField(null=True)
 
     class Meta:
         abstract = True
@@ -67,6 +68,10 @@ class SkinCancer(Cancer):
 
 class BrainCancer(Cancer):
     mri = models.ImageField(upload_to="cancer/brain", blank=True, null=True)
+
+
+class Genome(Cancer):
+    vcf = models.FileField(upload_to="cancer/genome", blank=True, null=True)
 
 
 class Report(models.Model):
@@ -126,6 +131,13 @@ class BrainCancerReport(Report):
     predicted_label = models.CharField(max_length=200, null=True)
     max_prob = models.FloatField(null=True)
     segmented_image = models.URLField(null=True)
+
+
+class GenomeReport(Report):
+    cancer = models.OneToOneField(
+        Genome, on_delete=models.CASCADE, related_name="report"
+    )
+    output = models.TextField(null=True)
 
 
 class Notifications(models.Model):

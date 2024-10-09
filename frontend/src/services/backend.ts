@@ -4,6 +4,8 @@ import {
   _BREAST_CANCER,
   _BREAST_REPORT,
   _CASE_STUDY,
+  _GENOME,
+  _GENOME_REPORT,
   _LUNG_CANCER,
   _LUNG_REPORT,
   _PATIENT,
@@ -84,6 +86,21 @@ export const createLungCancer = async (formData: _LUNG_CANCER) => {
   return response.data;
 };
 
+export const createGenome = async (formData: _GENOME) => {
+  const options = {
+    method: 'POST',
+    withCredentials: true,
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Authorization': `Bearer ${getAccessToken()}`,
+    },
+  };
+
+  const response: AxiosResponse<_GENOME> = await basicAxios('/genome/', options);
+  return response.data;
+};
+
 export const getScans = async (patient: string) => {
   const response: AxiosResponse<_SCAN[]> = await basicAxios(`/patients/${patient}/scans/`);
   return response.data;
@@ -101,6 +118,11 @@ export const getBreastReport = async (id: string) => {
 
 export const getLungReport = async (id: string) => {
   const response: AxiosResponse<_LUNG_REPORT> = await basicAxios(`/lungs/${id}/report/`);
+  return response.data;
+};
+
+export const getGenomeReport = async (id: string) => {
+  const response: AxiosResponse<_GENOME_REPORT> = await basicAxios(`/genome/${id}/report/`);
   return response.data;
 };
 
@@ -126,11 +148,6 @@ export const getSurvivalResponse = async (form: _SURVIVAL, patientId: string) =>
     `/patients/${patientId}/survival/`,
     options
   );
-  return response.data;
-};
-
-export const getGenomeResponse = async () => {
-  const response: AxiosResponse<string> = await basicAxios(`/chat/`);
   return response.data;
 };
 

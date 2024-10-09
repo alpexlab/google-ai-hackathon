@@ -3,6 +3,8 @@ from cancer.models import (
     LungCancer,
     SkinCancer,
     BrainCancer,
+    Genome,
+    GenomeReport,
     BreastCancerReport,
     LungCancerReport,
     SkinCancerReport,
@@ -53,6 +55,14 @@ class BrainCancerSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class GenomeSerializer(serializers.ModelSerializer):
+    status = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Genome
+        fields = "__all__"
+
+
 class BreastCancerReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = BreastCancerReport
@@ -86,4 +96,10 @@ class NotificationsSerializer(serializers.ModelSerializer):
 class CaseStudySerializer(serializers.ModelSerializer):
     class Meta:
         model = CaseStudy
+        fields = "__all__"
+
+
+class GenomeReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GenomeReport
         fields = "__all__"

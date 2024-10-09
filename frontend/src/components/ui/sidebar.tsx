@@ -54,8 +54,8 @@ const Sidebar = () => {
         <li className='py-2'>
           <Link
             to={'/case-studies'}
-            className={`flex items-center space-x-2 p-2 rounded-md transition-colors duration-200 ease-in-out ${location.pathname === '/chat' ? 'bg-blue-600 text-white' : 'hover:bg-blue-600 hover:text-white'}`}
-            aria-label='Chat Section'
+            className={`flex items-center space-x-2 p-2 rounded-md transition-colors duration-200 ease-in-out ${location.pathname === '/case-studies' ? 'bg-blue-600 text-white' : 'hover:bg-blue-600 hover:text-white'}`}
+            aria-label='Case Study Section'
           >
             <FileText size={24} color='currentColor' />
             <span className='font-medium'>Case Study</span>
