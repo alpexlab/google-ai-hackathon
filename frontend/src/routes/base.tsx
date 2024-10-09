@@ -12,6 +12,9 @@ import Chat from '@/pages/chat';
 import Notifications from '@/pages/notifications';
 import WelcomePage from '@/pages/dashboard';
 import GenomePage from '@/pages/genome';
+import BlogEditor from '@/pages/blogs';
+import Blog from '@/pages/blogs/Blog';
+import BlogRead from '@/pages/blogs/BlogRead';
 
 const router = createBrowserRouter([
   {
@@ -61,6 +64,18 @@ const router = createBrowserRouter([
       {
         path: '/genome',
         element: <GenomePage />,
+      },
+      {
+        path: '/editor',
+        element: <BlogEditor />,
+      },
+      {
+        path: '/case-studies',
+        element: <Blog />,
+      },
+      {
+        path: '/case-studies/:id',
+        element: <BlogRead />,
       },
     ],
   },
