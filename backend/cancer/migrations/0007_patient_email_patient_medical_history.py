@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('cancer', '0006_braincancerreport_max_prob_and_more'),
+        ("cancer", "0006_braincancerreport_max_prob_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='patient',
-            name='email',
+            model_name="patient",
+            name="email",
             field=models.EmailField(max_length=254, null=True),
         ),
         migrations.AddField(
-            model_name='patient',
-            name='medical_history',
+            model_name="patient",
+            name="medical_history",
             field=models.TextField(null=True),
         ),
     ]

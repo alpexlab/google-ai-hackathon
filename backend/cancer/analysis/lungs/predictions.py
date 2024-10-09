@@ -3,6 +3,7 @@ from tensorflow.keras.preprocessing import image
 
 from django.conf import settings
 from cancer.models import LungCancerReport, Notifications
+from cancer.analysis.segmentation.mask import Segmentation
 
 
 class LungsAnalysis:
@@ -36,6 +37,8 @@ class LungsAnalysis:
         report.predicted_label = result
         report.probs = predictions.tolist()[0]
         report.max_prob = max(report.probs)
+        segmented_image_path = Segmentation(img_path).segmented_image_path
+        report.segmented_image = "/media/" + segmented_image_path.split("media/")[-1]
         report.status = LungCancerReport.Status.COMPLETE
         report.save()
 

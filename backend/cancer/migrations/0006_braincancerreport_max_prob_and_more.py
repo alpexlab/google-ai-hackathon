@@ -6,33 +6,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('cancer', '0005_lungcancer_mri'),
+        ("cancer", "0005_lungcancer_mri"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='braincancerreport',
-            name='max_prob',
+            model_name="braincancerreport",
+            name="max_prob",
             field=models.FloatField(null=True),
         ),
         migrations.AddField(
-            model_name='braincancerreport',
-            name='predicted_label',
+            model_name="braincancerreport",
+            name="predicted_label",
             field=models.CharField(max_length=200, null=True),
         ),
         migrations.AddField(
-            model_name='braincancerreport',
-            name='probs',
+            model_name="braincancerreport",
+            name="probs",
             field=models.JSONField(null=True),
         ),
         migrations.AddField(
-            model_name='braincancerreport',
-            name='result_image',
+            model_name="braincancerreport",
+            name="result_image",
             field=models.URLField(null=True),
         ),
         migrations.AddField(
-            model_name='braincancerreport',
-            name='stats_image',
+            model_name="braincancerreport",
+            name="stats_image",
             field=models.URLField(null=True),
         ),
     ]

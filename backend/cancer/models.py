@@ -104,6 +104,7 @@ class LungCancerReport(Report):
     probs = models.JSONField(null=True)
     predicted_label = models.CharField(max_length=200, null=True)
     max_prob = models.FloatField(null=True)
+    segmented_image = models.URLField(null=True)
 
 
 class SkinCancerReport(Report):
@@ -121,6 +122,7 @@ class BrainCancerReport(Report):
     probs = models.JSONField(null=True)
     predicted_label = models.CharField(max_length=200, null=True)
     max_prob = models.FloatField(null=True)
+    segmented_image = models.URLField(null=True)
 
 
 class Notifications(models.Model):

@@ -5,7 +5,7 @@ from PIL import Image
 
 from django.conf import settings
 from cancer.models import BrainCancerReport, Notifications
-from cancer.analysis.brain.segmentation import BrainSegmentation
+from cancer.analysis.segmentation.mask import Segmentation
 
 
 class BrainAnalysis:
@@ -36,7 +36,8 @@ class BrainAnalysis:
         report.probs = probs.tolist()
         report.predicted_label = predicted_label
         report.max_prob = max_prob
-        BrainSegmentation()
+        segmented_image_path = Segmentation(img_path).segmented_image_path
+        report.segmented_image = "/media/" + segmented_image_path.split("media/")[-1]
         report.status = BrainCancerReport.Status.COMPLETE
         report.save()
 

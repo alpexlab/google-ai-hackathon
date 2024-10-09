@@ -50,6 +50,7 @@ export type _BRAIN_REPORT = {
   report: {
     result_image: string;
     stats_image: string;
+    segmented_image: string;
     probs: number[];
     predicted_label: string;
     max_prob: string;
@@ -76,6 +77,7 @@ export type _LUNG_REPORT = {
   report: {
     result_image: string;
     stats_image: string;
+    segmented_image: string;
     probs: number[];
     predicted_label: string;
     max_prob: string;

@@ -22,6 +22,7 @@ const Brain = () => {
       let mri = response.cancer.mri as string;
       let result_image = response.report.result_image;
       let stats_image = response.report.stats_image;
+      let segmented_image = response.report.segmented_image;
 
       if (!mri.startsWith('http')) {
         response.cancer.mri = `${BACKEND_URL}${mri}`;
@@ -34,6 +35,10 @@ const Brain = () => {
 
         if (!stats_image.startsWith('http')) {
           response.report.stats_image = `${BACKEND_URL}${stats_image}`;
+        }
+
+        if (segmented_image && !segmented_image.startsWith('http')) {
+          response.report.segmented_image = `${BACKEND_URL}${segmented_image}`;
         }
       }
 
@@ -155,6 +160,18 @@ const Brain = () => {
                       src={report?.report.stats_image}
                       alt='stats'
                       className='rounded-lg border border-gray-300 mt-4 w-[300px] h-auto mx-auto'
+                    />
+                  </div>
+                </div>
+
+                {/* Result and Stats Images */}
+                <div className='mt-6'>
+                  <div className='text-center'>
+                    <h4 className='font-medium'>Segmented Image:</h4>
+                    <img
+                      src={report?.report.segmented_image}
+                      alt='result'
+                      className='rounded-lg border border-gray-300 mt-4 w-[500px] h-auto mx-auto'
                     />
                   </div>
                 </div>
