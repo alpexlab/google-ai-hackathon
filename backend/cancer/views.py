@@ -148,6 +148,92 @@ class PatientViewSet(ModelViewSet):
         data = sorted(data, key=lambda x: x["timestamp"], reverse=True)
         return Response(data)
 
+    @action(detail=True, methods=["get"])
+    def history(self, request, pk=None):
+        patient = self.get_object()
+        breast_cancer = BreastCancer.objects.filter(patient=patient)
+        lung_cancer = LungCancer.objects.filter(patient=patient)
+        brain_cancer = BrainCancer.objects.filter(patient=patient)
+        skin_cancer = SkinCancer.objects.filter(patient=patient)
+
+        data = {
+            "chart": [
+                {
+                    "title": "Brain",
+                    "labels": ["glioma", "meningioma", "notumor", "pituitary"],
+                    "points": [
+                        {"scan": f"Scan {index + 1}", **brain.chart_data}
+                        for index, brain in enumerate(brain_cancer)
+                    ],
+                },
+                {
+                    "title": "Lungs",
+                    "labels": ["Benign", "Malignant", "No Tumor Detected"],
+                    "points": [
+                        {"scan": f"Scan {index + 1}", **lung.chart_data}
+                        for index, lung in enumerate(lung_cancer)
+                    ],
+                },
+                {
+                    "title": "Breast",
+                    "labels": ["Benign", "Malignant"],
+                    "points": [
+                        {"scan": f"Scan {index + 1}", **breast.chart_data}
+                        for index, breast in enumerate(breast_cancer)
+                    ],
+                },
+                {
+                    "title": "Skin",
+                    "labels": [
+                        "actinic keratosis",
+                        "basal cell carcinoma",
+                        "dermatofibroma",
+                        "melanoma",
+                        "nevus",
+                        "pigmented benign keratosis",
+                        "seborrheic keratosis",
+                        "squamous cell carcinoma",
+                        "vascular lesion",
+                    ],
+                    "points": [
+                        {"scan": f"Scan {index + 1}", **skin.chart_data}
+                        for index, skin in enumerate(skin_cancer)
+                    ],
+                },
+            ],
+            "segments": {
+                "Brain": [
+                    {
+                        "img": brain.report.segmented_image,
+                        "timestamp": brain.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                    }
+                    for brain in brain_cancer
+                ],
+                "Lungs": [
+                    {
+                        "img": lung.report.segmented_image,
+                        "timestamp": lung.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                    }
+                    for lung in lung_cancer
+                ],
+                "Breast": [
+                    {
+                        "img": breast.report.segmented_image,
+                        "timestamp": breast.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                    }
+                    for breast in breast_cancer
+                ],
+                "Skin": [
+                    {
+                        "img": skin.report.segmented_image,
+                        "timestamp": skin.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                    }
+                    for skin in skin_cancer
+                ],
+            },
+        }
+        return Response(data)
+
     @action(detail=True, methods=["POST"])
     def survival(self, request, pk=None):
         from cancer.analysis.gemini.llm import Gemini

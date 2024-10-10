@@ -42,8 +42,8 @@ const Details = () => {
           value: res.age,
         },
         {
-          name: 'Medical History',
-          value: res.medical_history,
+          name: 'Created At',
+          value: new Date(res.created_at).toLocaleString(),
         },
       ];
 
@@ -61,30 +61,57 @@ const Details = () => {
   return (
     <div>
       <EasyNav patient={patientId} />
-      <div className='m-5 grid grid-cols-3 gap-6'>
-        <Patient_Profile profile={patient} />
-        <div className='mt-4'>
-          <div className='flex w-[500px]'>
+
+      {/* Grid Layout */}
+      <div className='grid grid-cols-1 md:grid-cols-12 gap-6 m-5'>
+        {/* Patient Profile Section */}
+        <div className='md:col-span-4'>
+          <h2 className='text-xl font-semibold mb-4'>Patient Profile</h2>
+          <Patient_Profile profile={patient} />
+          <div className='mt-4 flex items-center'>
             <Link
-              to={`/add-scan?patient=${patientId}`}
-              className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+              to={`/medical-history?patient=${patientId}`}
+              className='text-blue-500 hover:underline'
             >
-              Detect
+              View Medical History
             </Link>
-            <AddDocument patientId={patientId} />
-            <SurvivalCalculator patientId={patientId} />
           </div>
-          <div className='mt-8'>
+        </div>
+
+        {/* Actions and Cancer Report Section */}
+        <div className='md:col-span-8'>
+          {/* Action Buttons */}
+          <div className='p-4 bg-white shadow rounded mb-6'>
+            <h2 className='text-xl font-semibold mb-4'>Actions</h2>
+            <div className='flex space-x-4'>
+              <Link
+                to={`/add-scan?patient=${patientId}`}
+                className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+              >
+                Detect
+              </Link>
+              <AddDocument patientId={patientId} />
+              <SurvivalCalculator patientId={patientId} />
+            </div>
+          </div>
+
+          {/* Cancer Report */}
+          <div className='p-4 bg-white shadow rounded'>
+            <h2 className='text-xl font-semibold mb-4'>Cancer Report</h2>
             <DataTable columns={getColumns(patientId)} data={scans} />
           </div>
         </div>
       </div>
-      {/* <div className='mt-4'>
 
-        <DocumentTable />
-      </div> */}
-      <div>
-        <Summary summary={patient?.summary} />
+      <div className='grid grid-cols-1 md:grid-cols-12 gap-6 m-5 mt-6'>
+        {/* Patient Profile Section */}
+        <div className='md:col-span-4 p-4 bg-white shadow rounded h-fit'>
+          <h2 className='text-xl font-semibold mb-4'>Medical Records</h2>
+          <DocumentTable />
+        </div>
+        <div className='md:col-span-8'>
+          <Summary summary={patient?.summary} />
+        </div>
       </div>
     </div>
   );

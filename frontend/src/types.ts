@@ -11,6 +11,7 @@ export type _PATIENT = {
   medical_history: string;
   photo: string | File | null;
   summary?: string;
+  created_at: string;
 };
 
 export type _GENOME_REPORT = {
@@ -136,4 +137,20 @@ export type _CASE_STUDY = {
   title: string;
   description: string;
   author?: string;
+};
+
+export type _MEDICAL_HISTORY = {
+  chart: {
+    title: string;
+    labels: string[];
+    points: {
+      [key: string]: string | number;
+    }[];
+  }[];
+  segments: {
+    [key: string]: {
+      img: string;
+      timestamp: string;
+    }[];
+  };
 };
