@@ -13,7 +13,7 @@ const Patient_Profile = ({ profile }: { profile: _PROFILE | undefined }) => {
   }
 
   return (
-    <div className='bg-gray-200 p-4 rounded-lg shadow-md h-[400px]'>
+    <div className='bg-gray-200 p-4 rounded-lg shadow-md'>
       <div className='flex items-center'>
         <img src={profile.photo as string} alt={profile.name} className='rounded-full h-24 w-24' />
         <div className='ml-4'>

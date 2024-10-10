@@ -9,6 +9,7 @@ import {
   _GENOME_REPORT,
   _LUNG_CANCER,
   _LUNG_REPORT,
+  _MEDICAL_HISTORY,
   _PATIENT,
   _SCAN,
   _SKIN_CANCER,
@@ -244,5 +245,12 @@ export const getCaseStudies = async () => {
 
 export const getCaseStudy = async (id: string) => {
   const response: AxiosResponse<_CASE_STUDY> = await basicAxios(`/case-studies/${id}/`);
+  return response.data;
+};
+
+export const getMedicalHistory = async (patientId: string) => {
+  const response: AxiosResponse<_MEDICAL_HISTORY> = await basicAxios(
+    `/patients/${patientId}/history/`
+  );
   return response.data;
 };

@@ -9,6 +9,7 @@ class Patient(models.Model):
     medical_history = models.TextField(null=True)
     photo = models.ImageField(upload_to="patients", blank=True, null=True)
     summary = models.TextField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return self.name
@@ -57,17 +58,53 @@ class Cancer(models.Model):
 class BreastCancer(Cancer):
     mri = models.ImageField(upload_to="cancer/breast", blank=True, null=True)
 
+    @property
+    def chart_data(self):
+        labels = ["Benign", "Malignant"]
+        probs = [round(prob, 2) for prob in self.report.probs]
+        return dict(zip(labels, probs))
+
 
 class LungCancer(Cancer):
     mri = models.ImageField(upload_to="cancer/lungs", blank=True, null=True)
+
+    @property
+    def chart_data(self):
+        labels = ["Benign", "Malignant", "No Tumor Detected"]
+        probs = [round(prob, 2) for prob in self.report.probs]
+        return dict(zip(labels, probs))
 
 
 class SkinCancer(Cancer):
     mri = models.ImageField(upload_to="cancer/skin", blank=True, null=True)
 
+    @property
+    def chart_data(self):
+        labels = [
+            "actinic keratosis",
+            "basal cell carcinoma",
+            "dermatofibroma",
+            "melanoma",
+            "nevus",
+            "pigmented benign keratosis",
+            "seborrheic keratosis",
+            "squamous cell carcinoma",
+            "vascular lesion",
+        ]
+        probs = [round(prob, 2) for prob in self.report.probs]
+        return dict(zip(labels, probs))
+
 
 class BrainCancer(Cancer):
     mri = models.ImageField(upload_to="cancer/brain", blank=True, null=True)
+
+    @property
+    def chart_data(self):
+        labels = ["glioma", "meningioma", "notumor", "pituitary"]
+        probs = [round(prob, 2) for prob in self.report.probs]
+
+        data = dict(zip(labels, probs))
+        return data
 
 
 class Genome(Cancer):

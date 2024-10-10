@@ -22,9 +22,5 @@ export const getColumns = (): ColumnDef<_DOCUMENT>[] => {
       accessorKey: 'created_at',
       header: 'Timestamp',
     },
-    {
-      accessorKey: 'comments',
-      header: 'Comments',
-    },
   ];
 };

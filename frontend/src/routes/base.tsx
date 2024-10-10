@@ -16,6 +16,7 @@ import Blog from '@/pages/blogs/Blog';
 import BlogRead from '@/pages/blogs/BlogRead';
 import Genome from '@/pages/report/Genome';
 import Skin from '@/pages/report/Skin';
+import MedicalHistory from '@/components/history/Page';
 
 const router = createBrowserRouter([
   {
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
       {
         path: '/case-studies/:id',
         element: <BlogRead />,
+      },
+      {
+        path: '/medical-history',
+        element: <MedicalHistory />,
       },
     ],
   },

@@ -55,7 +55,7 @@ const Skin = () => {
       <div className='container mx-auto p-6'>
         <Card className='max-w-5xl mx-auto shadow-lg p-6'>
           <CardHeader>
-            <CardTitle className='text-3xl font-bold'>Brain Cancer Report</CardTitle>
+            <CardTitle className='text-3xl font-bold'>Skin Cancer Report</CardTitle>
           </CardHeader>
           <CardContent className='space-y-6'>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>

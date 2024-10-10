@@ -62,7 +62,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   });
 
   return (
-    <div className='w-[600px] mx-auto'>
+    <div className='mx-auto'>
       <div className='rounded-md border'>
         <Table>
           <TableHeader>
