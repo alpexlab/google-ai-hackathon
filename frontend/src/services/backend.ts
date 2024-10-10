@@ -4,6 +4,7 @@ import {
   _BREAST_CANCER,
   _BREAST_REPORT,
   _CASE_STUDY,
+  _DOCUMENT,
   _GENOME,
   _GENOME_REPORT,
   _LUNG_CANCER,
@@ -168,6 +169,31 @@ export const getSurvivalResponse = async (form: _SURVIVAL, patientId: string) =>
   const response: AxiosResponse<string> = await basicAxios(
     `/patients/${patientId}/survival/`,
     options
+  );
+  return response.data;
+};
+
+export const createDocument = async (form: _DOCUMENT, patientId: string) => {
+  const options = {
+    method: 'POST',
+    withCredentials: true,
+    data: form,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Authorization': `Bearer ${getAccessToken()}`,
+    },
+  };
+
+  const response: AxiosResponse<string> = await basicAxios(
+    `/patients/${patientId}/document/`,
+    options
+  );
+  return response.data;
+};
+
+export const getDocuments = async (patientId: string) => {
+  const response: AxiosResponse<_DOCUMENT[]> = await basicAxios(
+    `/patients/${patientId}/document_table/`
   );
   return response.data;
 };

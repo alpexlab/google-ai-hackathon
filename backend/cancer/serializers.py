@@ -12,6 +12,7 @@ from cancer.models import (
     Patient,
     Notifications,
     CaseStudy,
+    Document,
 )
 
 from rest_framework import serializers
@@ -102,4 +103,10 @@ class CaseStudySerializer(serializers.ModelSerializer):
 class GenomeReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = GenomeReport
+        fields = "__all__"
+
+
+class DocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Document
         fields = "__all__"

@@ -157,3 +157,11 @@ class CaseStudy(models.Model):
 
     class Meta:
         verbose_name_plural = "Case Studies"
+
+
+class Document(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    document = models.FileField(upload_to="documents", blank=True, null=True)
+    comments = models.TextField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    analysis = models.TextField(null=True)

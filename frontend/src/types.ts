@@ -28,6 +28,13 @@ export type _SURVIVAL = {
   type: string;
 };
 
+export type _DOCUMENT = {
+  comments: string;
+  document: File | null | string;
+  id?: string;
+  created_at?: string;
+};
+
 export type _SCAN = {
   id: string;
   type: string;

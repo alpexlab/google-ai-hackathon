@@ -21,6 +21,7 @@ from cancer.models import (
     BrainCancerReport,
     Patient,
     Notifications,
+    Document,
     CaseStudy,
 )
 from cancer.serializers import (
@@ -37,6 +38,7 @@ from cancer.serializers import (
     PatientSerializer,
     CaseStudySerializer,
     NotificationsSerializer,
+    DocumentSerializer,
 )
 from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.decorators import action
@@ -177,6 +179,22 @@ class PatientViewSet(ModelViewSet):
         message = gemini.generate_answer(prompt)
 
         return Response(message)
+
+    @action(detail=True, methods=["POST"])
+    def document(self, request, pk=None):
+        patient = self.get_object()
+        request.data["patient"] = patient.id
+        serializer = DocumentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    @action(detail=True, methods=["get"])
+    def document_table(self, request, pk=None):
+        patient = self.get_object()
+        documents = Document.objects.filter(patient=patient)
+        serializer = DocumentSerializer(documents, many=True)
+        return Response(serializer.data)
 
 
 class BreastCancerViewSet(ModelViewSet):

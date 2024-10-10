@@ -58,7 +58,7 @@ const FAQ = () => {
     <div className='flex'>
       <div className='w-[600px] m-6'>
         <h2 className='text-2xl font-semibold mb-4'>Frequently Asked Questions</h2>
-        <Accordion type='multiple' defaultValue={['item-0']} className='space-y-4'>
+        <Accordion type='multiple' className='space-y-4'>
           {faqItems.map((item, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
               <AccordionTrigger>{item.question}</AccordionTrigger>
