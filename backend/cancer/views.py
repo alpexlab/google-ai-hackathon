@@ -1,52 +1,59 @@
 import threading
-
 from django.conf import settings
 
+# Django REST Framework imports for setting up APIs and handling requests and responses
 from rest_framework.routers import DefaultRouter
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
+# Importing models related to cancer data, patient information, notifications, and documentation
 from cancer.models import (
-    BreastCancer,
-    Genome,
-    GenomeReport,
-    LungCancer,
-    SkinCancer,
-    BrainCancer,
-    BreastCancerReport,
-    LungCancerReport,
-    SkinCancerReport,
-    BrainCancerReport,
-    Patient,
-    Notifications,
-    Document,
-    CaseStudy,
+    BreastCancer,         # Model representing breast cancer data
+    Genome,               # Model representing genetic information
+    GenomeReport,         # Model representing reports generated from genetic data
+    LungCancer,           # Model for lung cancer data
+    SkinCancer,           # Model for skin cancer data
+    BrainCancer,          # Model for brain cancer data
+    BreastCancerReport,   # Model representing reports for breast cancer cases
+    LungCancerReport,     # Model representing reports for lung cancer cases
+    SkinCancerReport,     # Model representing reports for skin cancer cases
+    BrainCancerReport,    # Model representing reports for brain cancer cases
+    Patient,              # Model representing patient details
+    Notifications,        # Model for handling notifications
+    Document,             # Model representing medical documents
+    CaseStudy             # Model representing case studies related to cancer
 )
+
+# Importing serializers to convert model instances into JSON and validate incoming data
 from cancer.serializers import (
-    BreastCancerSerializer,
-    GenomeReportSerializer,
-    GenomeSerializer,
-    LungCancerSerializer,
-    SkinCancerSerializer,
-    BrainCancerSerializer,
-    BreastCancerReportSerializer,
-    LungCancerReportSerializer,
-    SkinCancerReportSerializer,
-    BrainCancerReportSerializer,
-    PatientSerializer,
-    CaseStudySerializer,
-    NotificationsSerializer,
-    DocumentSerializer,
+    BreastCancerSerializer,        # Serializer for breast cancer model
+    GenomeReportSerializer,        # Serializer for genome report model
+    GenomeSerializer,              # Serializer for genome data
+    LungCancerSerializer,          # Serializer for lung cancer model
+    SkinCancerSerializer,          # Serializer for skin cancer model
+    BrainCancerSerializer,         # Serializer for brain cancer model
+    BreastCancerReportSerializer,  # Serializer for breast cancer reports
+    LungCancerReportSerializer,    # Serializer for lung cancer reports
+    SkinCancerReportSerializer,    # Serializer for skin cancer reports
+    BrainCancerReportSerializer,   # Serializer for brain cancer reports
+    PatientSerializer,             # Serializer for patient data
+    CaseStudySerializer,           # Serializer for case studies
+    NotificationsSerializer,       # Serializer for notifications
+    DocumentSerializer             # Serializer for documents
 )
+
+# Parsers to handle different content types in API requests
 from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.decorators import action
 
-from cancer.analysis.breast.predictions import BreastAnalysis
-from cancer.analysis.brain.predictions import BrainAnalysis
-from cancer.analysis.lungs.predictions import LungsAnalysis
-from cancer.analysis.skin.predictions import SkinAnalysis
+# Importing analysis modules for each cancer type, used to generate predictions and analyze data
+from cancer.analysis.breast.predictions import BreastAnalysis   # Breast cancer analysis module
+from cancer.analysis.brain.predictions import BrainAnalysis     # Brain cancer analysis module
+from cancer.analysis.lungs.predictions import LungsAnalysis     # Lung cancer analysis module
+from cancer.analysis.skin.predictions import SkinAnalysis       # Skin cancer analysis module
+
 
 
 class PatientViewSet(ModelViewSet):
