@@ -57,18 +57,29 @@ from cancer.analysis.skin.predictions import SkinAnalysis       # Skin cancer an
 
 
 class PatientViewSet(ModelViewSet):
+    """ViewSet for handling Patient-related requests."""
     serializer_class = PatientSerializer
     parser_classes = [MultiPartParser, JSONParser]
 
     def get_queryset(self):
+        """
+        Return the queryset of patients associated with the requesting doctor.
+        """
         return Patient.objects.filter(doctor=self.request.doctor)
 
     def create(self, request, *args, **kwargs):
+        """
+        Create a new patient entry with the doctor set to the requesting doctor.
+        """
         request.data["doctor"] = request.doctor
         return super().create(request, *args, **kwargs)
 
     @action(detail=True, methods=["get"])
     def scans(self, request, pk=None):
+        """
+        Retrieve and return the list of all scans for the specified patient,
+        categorized by type (e.g., breast, lungs, brain, skin, genome).
+        """
         from datetime import datetime
 
         patient = self.get_object()
@@ -78,171 +89,94 @@ class PatientViewSet(ModelViewSet):
         skin_cancer = SkinCancer.objects.filter(patient=patient)
         genome = Genome.objects.filter(patient=patient)
 
+        # Serialize each type of cancer data
         breast_cancer_serializer = BreastCancerSerializer(breast_cancer, many=True)
         lung_cancer_serializer = LungCancerSerializer(lung_cancer, many=True)
         brain_cancer_serializer = BrainCancerSerializer(brain_cancer, many=True)
         skin_cancer_serializer = SkinCancerSerializer(skin_cancer, many=True)
         genome_serializer = GenomeSerializer(genome, many=True)
 
+        # Collect data with timestamps for sorting
         data = []
         iso_format = "%Y-%m-%dT%H:%M:%S.%fZ"
 
-        data.extend(
-            [
-                {
-                    "type": "breast",
-                    "timestamp": datetime.strptime(
-                        scan["created_at"], iso_format
-                    ).strftime("%Y-%m-%d %H:%M:%S"),
-                    **scan,
-                }
-                for scan in breast_cancer_serializer.data
-            ]
-        )
+        # Format and append each scan type
+        data.extend([
+            {"type": "breast", "timestamp": datetime.strptime(scan["created_at"], iso_format).strftime("%Y-%m-%d %H:%M:%S"), **scan}
+            for scan in breast_cancer_serializer.data
+        ])
+        data.extend([
+            {"type": "lungs", "timestamp": datetime.strptime(scan["created_at"], iso_format).strftime("%Y-%m-%d %H:%M:%S"), **scan}
+            for scan in lung_cancer_serializer.data
+        ])
+        data.extend([
+            {"type": "brain", "timestamp": datetime.strptime(scan["created_at"], iso_format).strftime("%Y-%m-%d %H:%M:%S"), **scan}
+            for scan in brain_cancer_serializer.data
+        ])
+        data.extend([
+            {"type": "skin", "timestamp": datetime.strptime(scan["created_at"], iso_format).strftime("%Y-%m-%d %H:%M:%S"), **scan}
+            for scan in skin_cancer_serializer.data
+        ])
+        data.extend([
+            {"type": "genome", "timestamp": datetime.strptime(scan["created_at"], iso_format).strftime("%Y-%m-%d %H:%M:%S"), **scan}
+            for scan in genome_serializer.data
+        ])
 
-        data.extend(
-            [
-                {
-                    "type": "lungs",
-                    "timestamp": datetime.strptime(
-                        scan["created_at"], iso_format
-                    ).strftime("%Y-%m-%d %H:%M:%S"),
-                    **scan,
-                }
-                for scan in lung_cancer_serializer.data
-            ]
-        )
-
-        data.extend(
-            [
-                {
-                    "type": "brain",
-                    "timestamp": datetime.strptime(
-                        scan["created_at"], iso_format
-                    ).strftime("%Y-%m-%d %H:%M:%S"),
-                    **scan,
-                }
-                for scan in brain_cancer_serializer.data
-            ]
-        )
-
-        data.extend(
-            [
-                {
-                    "type": "skin",
-                    "timestamp": datetime.strptime(
-                        scan["created_at"], iso_format
-                    ).strftime("%Y-%m-%d %H:%M:%S"),
-                    **scan,
-                }
-                for scan in skin_cancer_serializer.data
-            ]
-        )
-
-        data.extend(
-            [
-                {
-                    "type": "genome",
-                    "timestamp": datetime.strptime(
-                        scan["created_at"], iso_format
-                    ).strftime("%Y-%m-%d %H:%M:%S"),
-                    **scan,
-                }
-                for scan in genome_serializer.data
-            ]
-        )
-
+        # Sort by timestamp in descending order
         data = sorted(data, key=lambda x: x["timestamp"], reverse=True)
         return Response(data)
 
     @action(detail=True, methods=["get"])
     def history(self, request, pk=None):
+        """
+        Retrieve the scan history for the specified patient, organized by type of cancer,
+        with chart data and segmented images.
+        """
         patient = self.get_object()
         breast_cancer = BreastCancer.objects.filter(patient=patient)
         lung_cancer = LungCancer.objects.filter(patient=patient)
         brain_cancer = BrainCancer.objects.filter(patient=patient)
         skin_cancer = SkinCancer.objects.filter(patient=patient)
 
+        # Prepare data for charts and segments
         data = {
             "chart": [
                 {
                     "title": "Brain",
                     "labels": ["glioma", "meningioma", "notumor", "pituitary"],
-                    "points": [
-                        {"scan": f"Scan {index + 1}", **brain.chart_data}
-                        for index, brain in enumerate(brain_cancer)
-                    ],
+                    "points": [{"scan": f"Scan {index + 1}", **brain.chart_data} for index, brain in enumerate(brain_cancer)]
                 },
                 {
                     "title": "Lungs",
                     "labels": ["Benign", "Malignant", "No Tumor Detected"],
-                    "points": [
-                        {"scan": f"Scan {index + 1}", **lung.chart_data}
-                        for index, lung in enumerate(lung_cancer)
-                    ],
+                    "points": [{"scan": f"Scan {index + 1}", **lung.chart_data} for index, lung in enumerate(lung_cancer)]
                 },
                 {
                     "title": "Breast",
                     "labels": ["Benign", "Malignant"],
-                    "points": [
-                        {"scan": f"Scan {index + 1}", **breast.chart_data}
-                        for index, breast in enumerate(breast_cancer)
-                    ],
+                    "points": [{"scan": f"Scan {index + 1}", **breast.chart_data} for index, breast in enumerate(breast_cancer)]
                 },
                 {
                     "title": "Skin",
-                    "labels": [
-                        "actinic keratosis",
-                        "basal cell carcinoma",
-                        "dermatofibroma",
-                        "melanoma",
-                        "nevus",
-                        "pigmented benign keratosis",
-                        "seborrheic keratosis",
-                        "squamous cell carcinoma",
-                        "vascular lesion",
-                    ],
-                    "points": [
-                        {"scan": f"Scan {index + 1}", **skin.chart_data}
-                        for index, skin in enumerate(skin_cancer)
-                    ],
+                    "labels": ["actinic keratosis", "basal cell carcinoma", "dermatofibroma", "melanoma", "nevus", "pigmented benign keratosis", "seborrheic keratosis", "squamous cell carcinoma", "vascular lesion"],
+                    "points": [{"scan": f"Scan {index + 1}", **skin.chart_data} for index, skin in enumerate(skin_cancer)]
                 },
             ],
             "segments": {
-                "Brain": [
-                    {
-                        "img": brain.report.segmented_image,
-                        "timestamp": brain.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-                    }
-                    for brain in brain_cancer
-                ],
-                "Lungs": [
-                    {
-                        "img": lung.report.segmented_image,
-                        "timestamp": lung.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-                    }
-                    for lung in lung_cancer
-                ],
-                "Breast": [
-                    {
-                        "img": breast.report.segmented_image,
-                        "timestamp": breast.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-                    }
-                    for breast in breast_cancer
-                ],
-                "Skin": [
-                    {
-                        "img": skin.report.segmented_image,
-                        "timestamp": skin.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-                    }
-                    for skin in skin_cancer
-                ],
+                "Brain": [{"img": brain.report.segmented_image, "timestamp": brain.created_at.strftime("%Y-%m-%d %H:%M:%S")} for brain in brain_cancer],
+                "Lungs": [{"img": lung.report.segmented_image, "timestamp": lung.created_at.strftime("%Y-%m-%d %H:%M:%S")} for lung in lung_cancer],
+                "Breast": [{"img": breast.report.segmented_image, "timestamp": breast.created_at.strftime("%Y-%m-%d %H:%M:%S")} for breast in breast_cancer],
+                "Skin": [{"img": skin.report.segmented_image, "timestamp": skin.created_at.strftime("%Y-%m-%d %H:%M:%S")} for skin in skin_cancer],
             },
         }
         return Response(data)
 
     @action(detail=True, methods=["POST"])
     def survival(self, request, pk=None):
+        """
+        Predict the 5-year survival rate for a patient based on the provided staging and cancer type
+        by generating a prompt to an external analysis model.
+        """
         from cancer.analysis.gemini.llm import Gemini
 
         patient = self.get_object()
@@ -251,6 +185,7 @@ class PatientViewSet(ModelViewSet):
         mstage = request.data.get("mstage")
         type = request.data.get("type")
 
+        # Format prompt for survival prediction
         prompt = """
         Please predict the 5-year survival rate for the following patient based on the provided attributes.
         - T Stage: {tstage}
@@ -275,6 +210,9 @@ class PatientViewSet(ModelViewSet):
 
     @action(detail=True, methods=["POST"])
     def document(self, request, pk=None):
+        """
+        Save a new document for the specified patient.
+        """
         patient = self.get_object()
         request.data["patient"] = patient.id
         serializer = DocumentSerializer(data=request.data)
@@ -284,10 +222,14 @@ class PatientViewSet(ModelViewSet):
 
     @action(detail=True, methods=["get"])
     def document_table(self, request, pk=None):
+        """
+        Retrieve a table of documents associated with the specified patient.
+        """
         patient = self.get_object()
         documents = Document.objects.filter(patient=patient)
         serializer = DocumentSerializer(documents, many=True)
         return Response(serializer.data)
+
 
 
 class BreastCancerViewSet(ModelViewSet):
