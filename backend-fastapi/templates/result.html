@@ -1,0 +1,22 @@
+<!-- templates/result.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+</head>
+<body>
+    <h2>Prediction Result</h2>
+    <img src="{{ image_url }}" alt="Uploaded Image" width="256" height="256">
+    <h3>Predicted Class: {{ predicted_class }}</h3>
+    <h4>Class Probabilities:</h4>
+    <ul>
+        {% for name, prob in class_probabilities %}
+            <p>{{ name }}: {{ prob }}</p>
+        {% endfor %}
+
+    </ul>
+    <a href="/">Go back</a>
+</body>
+</html>
