@@ -74,3 +74,15 @@ async def chat(message: ChatMessage):
         response = get_fallback_response(message.message)
     
     return JSONResponse(content={"response": response})
+
+def get_fallback_response(message: str):
+    # Basic response logic without RAG
+    message = message.lower()
+    if "what is" in message or "tell me about" in message:
+        return "I can provide information about different types of skin cancers and their characteristics. However, for specific medical advice, please consult a healthcare professional."
+    elif "symptoms" in message:
+        return "Common symptoms of skin cancer may include changes in skin appearance, new growths, or changes in existing moles. However, please consult a healthcare professional for proper diagnosis."
+    elif "prevention" in message:
+        return "Some key prevention methods include using sunscreen, avoiding excessive sun exposure, and regular skin checks. Consult your healthcare provider for personalized advice."
+    else:
+        return "I'm a skin cancer classification assistant. I can help you understand skin cancer types, prevention, and classification results. What would you like to know?"
