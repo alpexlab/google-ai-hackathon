@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Cancer Classifier Chatbot</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- Navigation Bar -->
+    <header class="bg-gray-800 text-white py-4 px-6">
+        <nav class="flex justify-between items-center">
+            <a href="/" class="text-lg font-bold">Skin Cancer Classifier</a>
+            <ul class="flex space-x-4">
+                <li><a href="/" class="hover:text-gray-300">Upload</a></li>
+                <li><a href="/result" class="hover:text-gray-300">Results</a></li>
+                <li><a href="/chatbot" class="hover:text-gray-300">Chatbot</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">AI Assistant</h2>
+            
+            <!-- Chat Messages Container -->
+            <div id="chat-messages" class="h-96 overflow-y-auto mb-6 p-4 border rounded-lg">
+                <div class="space-y-4">
+                    <!-- System Message -->
+                    <div class="flex items-start">
+                        <div class="bg-gray-100 rounded-lg p-3 max-w-3/4">
+                            <p class="text-gray-800">Hello! I'm your AI assistant for skin cancer classification. How can I help you today?</p>
+                        </div>
+                    </div>
+                    <!-- Messages will be dynamically added here -->
+                </div>
+            </div>
+            
+            <!-- Input Form -->
+            <form id="chat-form" class="flex space-x-2" onsubmit="sendMessage(event)">
+                <input type="text" id="user-input" 
+                       class="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="Type your message here...">
+                <button type="submit" 
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-lg transition duration-200">
+                    Send
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById('chat-messages');
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
+
+        async function sendMessage(event) {
+            event.preventDefault();
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            // Add user message to chat
+            addMessage(message, 'user');
+            userInput.value = '';
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                const data = await response.json();
+                addMessage(data.response, 'assistant');
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage('Sorry, there was an error processing your message.', 'assistant');
+            }
+        }
+
+        function addMessage(message, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'flex items-start ' + (sender === 'user' ? 'justify-end' : '');
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = `rounded-lg p-3 max-w-3/4 ${
+                sender === 'user' 
+                    ? 'bg-blue-500 text-white' 
+                    : 'bg-gray-100 text-gray-800'
+            }`;
+            
+            messageContent.textContent = message;
+            messageDiv.appendChild(messageContent);
+            
+            chatMessages.querySelector('.space-y-4').appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    </script>
+</body>
+</html>
