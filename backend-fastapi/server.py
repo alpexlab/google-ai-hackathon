@@ -1,8 +1,8 @@
-# server.py
 from fastapi import FastAPI, File, UploadFile, Form, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
 from prediction import predict_image
 from PIL import Image
 import io
@@ -20,13 +20,12 @@ except ImportError:
 
 app = FastAPI()
 
-# Mount static directory if needed for additional assets like CSS, JS
+# Mount static directory
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Setup templates
 templates = Jinja2Templates(directory="templates")
 
-# Route for the upload form
 # Initialize RAG components (if enabled)
 if RAG_ENABLED:
     try:
@@ -75,6 +74,7 @@ async def chat(message: ChatMessage):
     
     return JSONResponse(content={"response": response})
 
+# Fallback response function when RAG is not available
 def get_fallback_response(message: str):
     # Basic response logic without RAG
     message = message.lower()
@@ -86,3 +86,28 @@ def get_fallback_response(message: str):
         return "Some key prevention methods include using sunscreen, avoiding excessive sun exposure, and regular skin checks. Consult your healthcare provider for personalized advice."
     else:
         return "I'm a skin cancer classification assistant. I can help you understand skin cancer types, prevention, and classification results. What would you like to know?"
+
+# Route to handle the prediction and display results
+@app.post("/predict/", response_class=HTMLResponse)
+async def predict(request: Request, file: UploadFile = File(...)):
+    # Read the image file
+    image_data = await file.read()
+    image = Image.open(io.BytesIO(image_data))
+
+    # Save the image temporarily to pass it to predictions.py
+    temp_image_path = "temp_image.jpg"
+    image.save(temp_image_path)
+
+    # Get predictions
+    result = predict_image(temp_image_path)
+    
+    # Combine class names and probabilities
+    class_probabilities = list(zip(result["class_names"], result["probabilities"]))
+
+    # Pass results to the template
+    return templates.TemplateResponse("result.html", {
+        "request": request,
+        "image_url": f"data:image/jpeg;base64,{base64.b64encode(image_data).decode()}",
+        "predicted_class": result["predicted_class"],
+        "class_probabilities": class_probabilities
+    })
