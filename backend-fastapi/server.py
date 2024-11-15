@@ -8,6 +8,16 @@ from PIL import Image
 import io
 import base64
 
+# Optional RAG imports (can be commented out if not using RAGs)
+try:
+    from langchain.embeddings import OpenAIEmbeddings
+    from langchain.vectorstores import FAISS
+    from langchain.chat_models import ChatOpenAI
+    from langchain.chains import ConversationalRetrievalChain
+    RAG_ENABLED = True
+except ImportError:
+    RAG_ENABLED = False
+
 app = FastAPI()
 
 # Mount static directory if needed for additional assets like CSS, JS
