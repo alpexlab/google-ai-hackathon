@@ -1,16 +1,58 @@
-<!-- templates/upload.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skin Cancer Classifier</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <h2>Upload an Image for Prediction</h2>
-    <form action="/predict/" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" accept="image/*" required>
-        <button type="submit">Predict</button>
-    </form>
+<body class="font-sans">
+    <header class="bg-gray-800 text-white py-4 px-6">
+        <nav class="flex justify-between items-center">
+            <a href="/" class="text-lg font-bold">Skin Cancer Classifier</a>
+            <ul class="flex space-x-4">
+                <li><a href="/" class="hover:text-gray-300">Upload</a></li>
+                <li><a href="/result" class="hover:text-gray-300">Results</a></li>
+                <li><a href="/chatbot" class="hover:text-gray-300">Chatbot</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="py-8 px-6">
+        {% if request.path == '/' %}
+        <section>
+            <h2 class="text-2xl font-bold mb-4">Upload an Image for Prediction</h2>
+            <form action="/predict/" method="post" enctype="multipart/form-data" class="max-w-md mx-auto">
+                <div class="mb-4">
+                    <input type="file" name="file" accept="image/*" required class="w-full border border-gray-300 rounded-md p-2">
+                </div>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded">Predict</button>
+            </form>
+        </section>
+        {% elif request.path == '/result' %}
+        <section>
+            <h2 class="text-2xl font-bold mb-4">Prediction Result</h2>
+            <div class="max-w-md mx-auto">
+                <img src="{{ image_url }}" alt="Uploaded Image" class="w-64 h-64 mx-auto">
+                <h3 class="text-xl font-medium mb-2">Predicted Class: {{ predicted_class }}</h3>
+                <h4 class="text-lg font-medium mb-2">Class Probabilities:</h4>
+                <ul class="space-y-1">
+                    {% for name, prob in class_probabilities %}
+                    <li>{{ name }}: {{ prob }}</li>
+                    {% endfor %}
+                </ul>
+                <a href="/" class="block mt-4 text-blue-500 hover:text-blue-600">Go back</a>
+            </div>
+        </section>
+        {% elif request.path == '/chatbot' %}
+        <section>
+            <h2 class="text-2xl font-bold mb-4">Skin Cancer Classifier Chatbot</h2>
+            <p class="mb-4">Engage with our chatbot for more information and assistance.</p>
+            <a href="/chatbot" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded">
+                Start Chatting
+            </a>
+        </section>
+        {% endif %}
+    </main>
 </body>
 </html>
